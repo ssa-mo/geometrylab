@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -39,7 +40,6 @@
         linear-gradient(145deg, #041314, var(--bg));
       color: var(--text);
       font-family:
-        "Pretendard",
         "Noto Sans KR",
         "Apple SD Gothic Neo",
         Arial,
@@ -55,7 +55,7 @@
     }
 
     .app {
-      width: min(1180px, 100%);
+      width: min(1200px, 100%);
       margin: 0 auto;
     }
 
@@ -70,11 +70,6 @@
       border-radius: 18px;
       background: rgba(7, 31, 32, 0.92);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
-    }
-
-    .title-wrap {
-      min-width: 0;
     }
 
     .title-wrap h1 {
@@ -97,7 +92,7 @@
     }
 
     .score-box {
-      min-width: 102px;
+      min-width: 96px;
       padding: 10px 12px;
       border: 1px solid rgba(85, 224, 207, 0.24);
       border-radius: 12px;
@@ -108,14 +103,47 @@
     .score-box span {
       display: block;
       color: var(--muted);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
     }
 
     .score-box strong {
       display: block;
       margin-top: 2px;
       color: var(--primary);
-      font-size: 1.2rem;
+      font-size: 1.15rem;
+    }
+
+    .score-box.timer-warning {
+      border-color: var(--warning);
+      background: rgba(103, 76, 18, 0.4);
+    }
+
+    .score-box.timer-warning strong {
+      color: var(--warning);
+    }
+
+    .score-box.timer-danger {
+      border-color: var(--danger);
+      background: rgba(112, 35, 35, 0.42);
+      animation: timerPulse 1s steps(1, end) infinite;
+    }
+
+    .score-box.timer-danger strong {
+      color: var(--danger);
+    }
+
+    @keyframes timerPulse {
+      0%,
+      49% {
+        transform: scale(1);
+        box-shadow: none;
+      }
+
+      50%,
+      100% {
+        transform: scale(1.04);
+        box-shadow: 0 0 20px rgba(255, 123, 123, 0.35);
+      }
     }
 
     .stage-tabs {
@@ -179,7 +207,7 @@
 
     .main-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(310px, 0.8fr);
+      grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.82fr);
       gap: 16px;
       align-items: stretch;
     }
@@ -235,7 +263,6 @@
       width: 100%;
       min-height: 505px;
       touch-action: none;
-      cursor: default;
     }
 
     .mission-card {
@@ -298,16 +325,17 @@
       color: var(--muted);
       background: rgba(9, 40, 41, 0.8);
       line-height: 1.35;
-      transition:
-        color 0.15s ease,
-        border-color 0.15s ease,
-        background 0.15s ease;
     }
 
     .condition-item.pass {
       border-color: rgba(101, 231, 142, 0.62);
       color: var(--text);
       background: rgba(34, 104, 67, 0.24);
+    }
+
+    .condition-item.near {
+      border-color: rgba(255, 209, 102, 0.48);
+      background: rgba(100, 76, 20, 0.18);
     }
 
     .condition-icon {
@@ -367,8 +395,9 @@
       background: linear-gradient(135deg, #67e9da, #31c0b1);
     }
 
-    .action-btn.primary:hover {
-      background: linear-gradient(135deg, #7af1e3, #46d3c3);
+    .action-btn.danger {
+      border-color: rgba(255, 123, 123, 0.55);
+      background: rgba(100, 35, 35, 0.28);
     }
 
     .action-btn:disabled {
@@ -397,11 +426,6 @@
       padding: 15px 17px;
     }
 
-    .feedback-box,
-    .measure-box {
-      min-width: 0;
-    }
-
     .bottom-label {
       margin-bottom: 6px;
       color: var(--muted);
@@ -428,14 +452,19 @@
       z-index: 20;
       top: 18px;
       left: 50%;
-      width: min(360px, calc(100% - 30px));
+      width: min(390px, calc(100% - 30px));
       padding: 16px;
       border: 1px solid rgba(101, 231, 142, 0.7);
       border-radius: 15px;
-      background: rgba(5, 42, 32, 0.96);
+      background: rgba(5, 42, 32, 0.97);
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
       text-align: center;
       transform: translateX(-50%);
+    }
+
+    .completion-panel.failure {
+      border-color: rgba(255, 123, 123, 0.75);
+      background: rgba(58, 18, 21, 0.97);
     }
 
     .completion-panel[hidden] {
@@ -448,14 +477,24 @@
       font-size: 1.2rem;
     }
 
+    .completion-panel.failure strong {
+      color: var(--danger);
+    }
+
     .completion-panel p {
       margin: 7px 0 12px;
-      color: var(--text);
       line-height: 1.45;
     }
 
-    .completion-panel button {
-      padding: 8px 18px;
+    .panel-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .panel-actions button {
+      padding: 8px 14px;
       border: 0;
       border-radius: 9px;
       color: #03231c;
@@ -464,11 +503,25 @@
       font-weight: 900;
     }
 
+    .panel-actions button.secondary {
+      color: var(--text);
+      background: var(--panel-light);
+      border: 1px solid rgba(99, 234, 217, 0.28);
+    }
+
     .shape-main {
       fill: var(--shape-fill);
       stroke: var(--shape-stroke);
       stroke-width: 4;
       stroke-linejoin: round;
+    }
+
+    .shape-main.near {
+      filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.38));
+    }
+
+    .shape-main.snap-ready {
+      filter: drop-shadow(0 0 12px rgba(85, 224, 207, 0.7));
     }
 
     .shape-side {
@@ -480,6 +533,10 @@
 
     .shape-side.highlight {
       stroke: rgba(255, 209, 102, 0.8);
+    }
+
+    .shape-side.near {
+      stroke: rgba(255, 209, 102, 0.4);
     }
 
     .diagonal-line {
@@ -511,8 +568,16 @@
       touch-action: none;
     }
 
-    .point-halo:active {
-      cursor: grabbing;
+    .point-halo.locked {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .point-glow {
+      fill: rgba(255, 209, 102, 0.14);
+      stroke: rgba(255, 209, 102, 0.5);
+      stroke-width: 2;
+      pointer-events: none;
     }
 
     .vertex-point {
@@ -522,10 +587,9 @@
       pointer-events: none;
     }
 
-    .vertex-label {
+    .vertex-label,
+    .measure-label {
       fill: var(--text);
-      font-size: 14px;
-      font-weight: 900;
       text-anchor: middle;
       pointer-events: none;
       paint-order: stroke;
@@ -534,16 +598,15 @@
       stroke-linejoin: round;
     }
 
+    .vertex-label {
+      font-size: 14px;
+      font-weight: 900;
+    }
+
     .measure-label {
       fill: #d8fffa;
       font-size: 13px;
       font-weight: 800;
-      text-anchor: middle;
-      pointer-events: none;
-      paint-order: stroke;
-      stroke: #04191a;
-      stroke-width: 4px;
-      stroke-linejoin: round;
     }
 
     .angle-arc {
@@ -572,7 +635,31 @@
       pointer-events: none;
     }
 
-    @media (max-width: 850px) {
+    .magnet-badge {
+      fill: rgba(85, 224, 207, 0.14);
+      stroke: var(--primary);
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .magnet-text {
+      fill: var(--primary);
+      font-size: 22px;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    @media (max-width: 900px) {
       body {
         padding: 10px;
       }
@@ -586,7 +673,7 @@
       }
 
       .score-box {
-        flex: 1;
+        flex: 1 1 96px;
       }
 
       .main-grid {
@@ -607,7 +694,7 @@
       }
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 540px) {
       .stage-tabs {
         gap: 6px;
       }
@@ -615,14 +702,6 @@
       .stage-btn {
         padding: 11px 5px;
         font-size: 0.83rem;
-      }
-
-      .stage-btn.completed::after {
-        top: 3px;
-        right: 3px;
-        width: 17px;
-        height: 17px;
-        font-size: 0.66rem;
       }
 
       .workspace-header {
@@ -658,6 +737,18 @@
 
       <div class="score-area">
         <div class="score-box">
+          <span>현재 Stage</span>
+          <strong id="topStage">1</strong>
+        </div>
+        <div class="score-box">
+          <span>문제 번호</span>
+          <strong id="problemNumber">1</strong>
+        </div>
+        <div id="timerBox" class="score-box">
+          <span>남은 시간</span>
+          <strong id="timeLeft">40초</strong>
+        </div>
+        <div class="score-box">
           <span>현재 총점</span>
           <strong id="totalScore">0</strong>
         </div>
@@ -690,15 +781,19 @@
           ></svg>
 
           <div id="completionPanel" class="completion-panel" hidden>
-            <strong>복원 완료!</strong>
+            <strong id="completionTitle">복원 완료!</strong>
             <p id="completionText"></p>
-            <button id="closeCompletionBtn" type="button">확인</button>
+            <div class="panel-actions">
+              <button id="panelRetryBtn" class="secondary" type="button">다시 도전</button>
+              <button id="panelNewProblemBtn" type="button">다음 랜덤 문제</button>
+              <button id="closeCompletionBtn" class="secondary" type="button">닫기</button>
+            </div>
           </div>
         </div>
       </article>
 
       <aside class="mission-card">
-        <div id="stageLabel" class="stage-label">STAGE 1</div>
+        <div id="stageLabel" class="stage-label">STAGE 1 · 문제 1</div>
         <h2 id="missionTitle">이등변삼각형 복원</h2>
         <div id="learningGoal" class="learning-goal"></div>
 
@@ -706,16 +801,15 @@
         <div id="conditionList" class="condition-list"></div>
 
         <div class="stage-score">
-          <span>이번 Stage 점수</span>
+          <span>현재 문제 기본 점수</span>
           <strong><span id="stageScore">100</span>점</strong>
         </div>
 
         <div class="button-grid">
           <button id="hintBtn" class="action-btn" type="button">힌트 보기</button>
           <button id="resetBtn" class="action-btn" type="button">초기화</button>
-          <button id="nextBtn" class="action-btn primary" type="button">
-            다음 Stage
-          </button>
+          <button id="newProblemBtn" class="action-btn" type="button">새 문제</button>
+          <button id="nextBtn" class="action-btn primary" type="button">다음 Stage</button>
         </div>
 
         <div id="hintText" class="hint-text">
@@ -725,14 +819,12 @@
     </section>
 
     <section class="bottom-panel">
-      <div class="feedback-box">
+      <div>
         <div class="bottom-label">실시간 피드백</div>
-        <div id="feedbackMessage">
-          꼭짓점을 움직이며 조건 표시가 바뀌는지 확인해 보세요.
-        </div>
+        <div id="feedbackMessage">꼭짓점을 움직이며 조건 표시가 바뀌는지 확인해 보세요.</div>
       </div>
 
-      <div class="measure-box">
+      <div>
         <div class="bottom-label">현재 측정값</div>
         <div id="measurementSummary"></div>
       </div>
@@ -743,13 +835,182 @@
     "use strict";
 
     const SVG_NS = "http://www.w3.org/2000/svg";
+    const SVG_BOUNDS = {
+      minX: 55,
+      maxX: 645,
+      minY: 55,
+      maxY: 445
+    };
+
     const STORAGE_KEYS = {
       bestScore: "geometryRepairLabBestScore",
       completedStages: "geometryRepairLabCompletedStages"
     };
 
+    const TIME_LIMITS = {
+      1: 40,
+      2: 50,
+      3: 60
+    };
+
+    const TOLERANCE = {
+      lengthRatio: 0.04,
+      angleDegrees: 4,
+      parallelCrossRatio: 0.05,
+      perpendicularDotRatio: 0.06,
+      diagonalRatio: 0.04,
+      snapLengthRatio: 0.08,
+      snapAngleDegrees: 8,
+      snapParallelRatio: 0.1,
+      snapPerpendicularRatio: 0.12,
+      nearLengthRatio: 0.14,
+      nearAngleDegrees: 14,
+      nearParallelRatio: 0.18,
+      nearPerpendicularRatio: 0.2
+    };
+
+    const stageData = {
+      1: {
+        title: "이등변삼각형 복원",
+        goal:
+          "두 변의 길이가 같을 때 두 밑각도 같아지는 이등변삼각형의 성질을 확인합니다.",
+        labels: ["A", "B", "C"],
+        conditions: [
+          "두 빗변의 길이가 거의 같다.",
+          "두 밑각의 크기가 거의 같다."
+        ],
+        hints: [
+          "꼭짓점 B가 밑변 AC의 수직이등분선 위에 오도록 조절하세요.",
+          "밑변의 양 끝에 있는 ∠A와 ∠C가 같아야 합니다.",
+          "점선으로 표시된 정답 도형을 참고해 꼭짓점을 이동하세요."
+        ]
+      },
+      2: {
+        title: "평행사변형 복원",
+        goal:
+          "평행사변형의 대변은 서로 평행하고 길이가 같으며, 마주 보는 각의 크기도 같습니다.",
+        labels: ["A", "B", "C", "D"],
+        conditions: [
+          "두 쌍의 대변이 각각 평행하다.",
+          "두 쌍의 대변 길이가 각각 같다.",
+          "마주 보는 각의 크기가 같다.",
+          "도형이 자기 교차하지 않는다."
+        ],
+        hints: [
+          "AB와 CD, BC와 DA가 서로 짝이 되는 대변입니다.",
+          "대변의 방향이 서로 나란해지도록 기울기를 맞추세요.",
+          "점선 평행사변형을 참고해 네 꼭짓점을 조절하세요."
+        ]
+      },
+      3: {
+        title: "직사각형 복원",
+        goal:
+          "직사각형은 네 각이 모두 직각이고, 대변이 평행하며 길이가 같고, 두 대각선의 길이도 같습니다.",
+        labels: ["A", "B", "C", "D"],
+        conditions: [
+          "네 각이 모두 약 90도이다.",
+          "두 쌍의 대변이 각각 평행하다.",
+          "두 쌍의 대변 길이가 각각 같다.",
+          "두 대각선의 길이가 같다.",
+          "도형이 자기 교차하지 않는다."
+        ],
+        hints: [
+          "네 꼭짓점이 모두 직각이 되도록 조절하세요.",
+          "AB와 CD, BC와 DA가 각각 평행하도록 맞추세요.",
+          "점선 직사각형을 참고해 꼭짓점을 이동하세요."
+        ]
+      }
+    };
+
+    const fallbackProblems = {
+      1: {
+        solutionPoints: [
+          { x: 190, y: 370 },
+          { x: 350, y: 120 },
+          { x: 510, y: 370 }
+        ],
+        initialPoints: [
+          { x: 155, y: 390 },
+          { x: 382, y: 94 },
+          { x: 520, y: 350 }
+        ],
+        features: {
+          centerX: 350,
+          centerY: 286,
+          width: 320,
+          height: 250,
+          ratio: 1.28,
+          rotation: 0,
+          brokenIndices: [0, 1]
+        }
+      },
+      2: {
+        solutionPoints: [
+          { x: 165, y: 170 },
+          { x: 465, y: 130 },
+          { x: 545, y: 360 },
+          { x: 245, y: 400 }
+        ],
+        initialPoints: [
+          { x: 135, y: 145 },
+          { x: 490, y: 110 },
+          { x: 555, y: 390 },
+          { x: 280, y: 410 }
+        ],
+        features: {
+          centerX: 355,
+          centerY: 265,
+          width: 303,
+          height: 244,
+          ratio: 1.24,
+          rotation: -8,
+          brokenIndices: [0, 3]
+        }
+      },
+      3: {
+        solutionPoints: [
+          { x: 185, y: 160 },
+          { x: 500, y: 205 },
+          { x: 465, y: 390 },
+          { x: 150, y: 345 }
+        ],
+        initialPoints: [
+          { x: 155, y: 130 },
+          { x: 520, y: 190 },
+          { x: 490, y: 420 },
+          { x: 180, y: 330 }
+        ],
+        features: {
+          centerX: 325,
+          centerY: 275,
+          width: 318,
+          height: 188,
+          ratio: 1.69,
+          rotation: 8,
+          brokenIndices: [0, 2]
+        }
+      }
+    };
+
     function calculateDistance(pointA, pointB) {
       return Math.hypot(pointB.x - pointA.x, pointB.y - pointA.y);
+    }
+
+    function calculateAngle(pointA, vertex, pointC) {
+      const vectorA = createVector(vertex, pointA);
+      const vectorC = createVector(vertex, pointC);
+      const lengthA = vectorLength(vectorA);
+      const lengthC = vectorLength(vectorC);
+
+      if (lengthA === 0 || lengthC === 0) {
+        return 0;
+      }
+
+      let cosine =
+        calculateDotProduct(vectorA, vectorC) / (lengthA * lengthC);
+
+      cosine = Math.max(-1, Math.min(1, cosine));
+      return Math.acos(cosine) * (180 / Math.PI);
     }
 
     function createVector(pointA, pointB) {
@@ -767,30 +1028,13 @@
       return vectorA.x * vectorB.y - vectorA.y * vectorB.x;
     }
 
-    function calculateAngle(pointA, vertex, pointC) {
-      const vectorA = createVector(vertex, pointA);
-      const vectorC = createVector(vertex, pointC);
-      const lengthA = Math.hypot(vectorA.x, vectorA.y);
-      const lengthC = Math.hypot(vectorC.x, vectorC.y);
-
-      if (lengthA === 0 || lengthC === 0) {
-        return 0;
-      }
-
-      let cosine =
-        calculateDotProduct(vectorA, vectorC) / (lengthA * lengthC);
-
-      cosine = Math.max(-1, Math.min(1, cosine));
-      return Math.acos(cosine) * (180 / Math.PI);
-    }
-
     function nearlyEqual(valueA, valueB, tolerance) {
       return Math.abs(valueA - valueB) <= tolerance;
     }
 
     function areVectorsParallel(vectorA, vectorB, toleranceDegrees = 5) {
-      const lengthA = Math.hypot(vectorA.x, vectorA.y);
-      const lengthB = Math.hypot(vectorB.x, vectorB.y);
+      const lengthA = vectorLength(vectorA);
+      const lengthB = vectorLength(vectorB);
 
       if (lengthA === 0 || lengthB === 0) {
         return false;
@@ -800,8 +1044,7 @@
         Math.abs(calculateCrossProduct(vectorA, vectorB)) /
         (lengthA * lengthB);
 
-      const limit = Math.sin((toleranceDegrees * Math.PI) / 180);
-      return normalizedCross <= limit;
+      return normalizedCross <= Math.sin((toleranceDegrees * Math.PI) / 180);
     }
 
     function orientation(pointA, pointB, pointC) {
@@ -848,54 +1091,50 @@
         return false;
       }
 
-      const edgeCount = points.length;
-
-      for (let i = 0; i < edgeCount; i += 1) {
-        const a1 = points[i];
-        const a2 = points[(i + 1) % edgeCount];
-
-        for (let j = i + 1; j < edgeCount; j += 1) {
-          const b1 = points[j];
-          const b2 = points[(j + 1) % edgeCount];
-
-          const sharesVertex =
-            i === j ||
-            (i + 1) % edgeCount === j ||
-            i === (j + 1) % edgeCount;
-
-          if (sharesVertex) {
-            continue;
-          }
-
-          if (doSegmentsIntersect(a1, a2, b1, b2)) {
-            return true;
-          }
-        }
-      }
-
-      return false;
+      return (
+        doSegmentsIntersect(points[0], points[1], points[2], points[3]) ||
+        doSegmentsIntersect(points[1], points[2], points[3], points[0])
+      );
     }
 
-    function polygonArea(points) {
-      let sum = 0;
-
-      for (let i = 0; i < points.length; i += 1) {
-        const current = points[i];
-        const next = points[(i + 1) % points.length];
-        sum += current.x * next.y - next.x * current.y;
-      }
-
-      return Math.abs(sum / 2);
+    function vectorLength(vector) {
+      return Math.hypot(vector.x, vector.y);
     }
 
-    function createSvgElement(tagName, attributes = {}) {
-      const element = document.createElementNS(SVG_NS, tagName);
+    function normalizeVector(vector) {
+      const length = vectorLength(vector) || 1;
+      return {
+        x: vector.x / length,
+        y: vector.y / length
+      };
+    }
 
-      Object.entries(attributes).forEach(([name, value]) => {
-        element.setAttribute(name, String(value));
-      });
+    function perpendicularVector(vector) {
+      return {
+        x: -vector.y,
+        y: vector.x
+      };
+    }
 
-      return element;
+    function addPoints(pointA, pointB) {
+      return {
+        x: pointA.x + pointB.x,
+        y: pointA.y + pointB.y
+      };
+    }
+
+    function subtractPoints(pointA, pointB) {
+      return {
+        x: pointA.x - pointB.x,
+        y: pointA.y - pointB.y
+      };
+    }
+
+    function scaleVector(vector, scale) {
+      return {
+        x: vector.x * scale,
+        y: vector.y * scale
+      };
     }
 
     function midpoint(pointA, pointB) {
@@ -905,12 +1144,30 @@
       };
     }
 
-    function normalizeVector(vector) {
-      const length = Math.hypot(vector.x, vector.y) || 1;
-      return {
-        x: vector.x / length,
-        y: vector.y / length
-      };
+    function polygonArea(points) {
+      let sum = 0;
+
+      for (let index = 0; index < points.length; index += 1) {
+        const nextIndex = (index + 1) % points.length;
+        sum +=
+          points[index].x * points[nextIndex].y -
+          points[nextIndex].x * points[index].y;
+      }
+
+      return Math.abs(sum / 2);
+    }
+
+    function signedPolygonArea(points) {
+      let sum = 0;
+
+      for (let index = 0; index < points.length; index += 1) {
+        const nextIndex = (index + 1) % points.length;
+        sum +=
+          points[index].x * points[nextIndex].y -
+          points[nextIndex].x * points[index].y;
+      }
+
+      return sum / 2;
     }
 
     function getPolygonCenter(points) {
@@ -928,101 +1185,838 @@
       };
     }
 
-    const stageData = {
-      1: {
-        title: "이등변삼각형 복원",
-        goal:
-          "두 변의 길이가 같을 때 두 밑각도 같아지는 이등변삼각형의 성질을 확인합니다.",
-        labels: ["A", "B", "C"],
-        initialPoints: [
-          { x: 170, y: 390 },
-          { x: 332, y: 120 },
-          { x: 560, y: 370 }
-        ],
-        examplePoints: [
-          { x: 190, y: 385 },
-          { x: 350, y: 115 },
-          { x: 510, y: 385 }
-        ],
-        conditions: [
-          "두 빗변의 길이가 거의 같다.",
-          "두 밑각의 크기가 거의 같다."
-        ],
-        hints: [
-          "꼭짓점 B에서 A와 C로 이어지는 두 변이 같은 길이가 되도록 조절하세요.",
-          "밑변 AC의 양 끝에 있는 ∠A와 ∠C가 같아야 합니다.",
-          "점선으로 표시된 이등변삼각형을 참고해 꼭짓점을 이동하세요."
-        ]
-      },
-      2: {
-        title: "평행사변형 복원",
-        goal:
-          "평행사변형의 대변은 서로 평행하고 길이가 같으며, 마주 보는 각의 크기도 같습니다.",
-        labels: ["A", "B", "C", "D"],
-        initialPoints: [
-          { x: 150, y: 150 },
-          { x: 500, y: 105 },
-          { x: 560, y: 380 },
-          { x: 215, y: 420 }
-        ],
-        examplePoints: [
-          { x: 165, y: 160 },
-          { x: 475, y: 160 },
-          { x: 550, y: 380 },
-          { x: 240, y: 380 }
-        ],
-        conditions: [
-          "두 쌍의 대변이 각각 평행하다.",
-          "두 쌍의 대변 길이가 각각 같다.",
-          "마주 보는 각의 크기가 같다.",
-          "도형이 자기 교차하지 않는다."
-        ],
-        hints: [
-          "AB와 CD, BC와 DA가 서로 짝이 되는 대변입니다.",
-          "노란 방향 가이드와 비슷하게 대변의 기울기를 맞추세요.",
-          "점선 평행사변형을 참고해 네 꼭짓점을 조절하세요."
-        ]
-      },
-      3: {
-        title: "직사각형 복원",
-        goal:
-          "직사각형은 네 각이 모두 직각이고, 대변이 평행하며 길이가 같고, 두 대각선의 길이도 같습니다.",
-        labels: ["A", "B", "C", "D"],
-        initialPoints: [
-          { x: 155, y: 145 },
-          { x: 525, y: 120 },
-          { x: 560, y: 390 },
-          { x: 185, y: 420 }
-        ],
-        examplePoints: [
-          { x: 170, y: 145 },
-          { x: 530, y: 145 },
-          { x: 530, y: 390 },
-          { x: 170, y: 390 }
-        ],
-        conditions: [
-          "네 각이 모두 약 90도이다.",
-          "두 쌍의 대변이 각각 평행하다.",
-          "두 쌍의 대변 길이가 각각 같다.",
-          "두 대각선의 길이가 같다.",
-          "도형이 자기 교차하지 않는다."
-        ],
-        hints: [
-          "네 꼭짓점이 모두 직각이 되도록 조절하세요.",
-          "AB와 CD, BC와 DA가 각각 평행하도록 맞추세요.",
-          "점선 직사각형을 참고해 꼭짓점을 이동하세요."
-        ]
+    function clamp(value, minimum, maximum) {
+      return Math.max(minimum, Math.min(maximum, value));
+    }
+
+    function clampPoint(point) {
+      return {
+        x: clamp(point.x, SVG_BOUNDS.minX, SVG_BOUNDS.maxX),
+        y: clamp(point.y, SVG_BOUNDS.minY, SVG_BOUNDS.maxY)
+      };
+    }
+
+    function clonePoints(points) {
+      return points.map((point) => ({ x: point.x, y: point.y }));
+    }
+
+    function randomBetween(minimum, maximum) {
+      return minimum + Math.random() * (maximum - minimum);
+    }
+
+    function randomInteger(minimum, maximum) {
+      return Math.floor(randomBetween(minimum, maximum + 1));
+    }
+
+    function randomSign() {
+      return Math.random() < 0.5 ? -1 : 1;
+    }
+
+    function rotatePoint(point, center, angleRadians) {
+      const cosine = Math.cos(angleRadians);
+      const sine = Math.sin(angleRadians);
+      const translatedX = point.x - center.x;
+      const translatedY = point.y - center.y;
+
+      return {
+        x: center.x + translatedX * cosine - translatedY * sine,
+        y: center.y + translatedX * sine + translatedY * cosine
+      };
+    }
+
+    function rotateVector(vector, angleRadians) {
+      const cosine = Math.cos(angleRadians);
+      const sine = Math.sin(angleRadians);
+
+      return {
+        x: vector.x * cosine - vector.y * sine,
+        y: vector.x * sine + vector.y * cosine
+      };
+    }
+
+    function relativeDifference(valueA, valueB) {
+      return Math.abs(valueA - valueB) / Math.max(Math.abs(valueA), Math.abs(valueB), 0.0001);
+    }
+
+    function normalizedCrossError(vectorA, vectorB) {
+      const denominator = vectorLength(vectorA) * vectorLength(vectorB);
+
+      if (denominator === 0) {
+        return Infinity;
       }
-    };
+
+      return Math.abs(calculateCrossProduct(vectorA, vectorB)) / denominator;
+    }
+
+    function normalizedDotError(vectorA, vectorB) {
+      const denominator = vectorLength(vectorA) * vectorLength(vectorB);
+
+      if (denominator === 0) {
+        return Infinity;
+      }
+
+      return Math.abs(calculateDotProduct(vectorA, vectorB)) / denominator;
+    }
+
+    function minimumPointDistance(points) {
+      let minimum = Infinity;
+
+      for (let first = 0; first < points.length; first += 1) {
+        for (let second = first + 1; second < points.length; second += 1) {
+          minimum = Math.min(
+            minimum,
+            calculateDistance(points[first], points[second])
+          );
+        }
+      }
+
+      return minimum;
+    }
+
+    function arePointsInsideBounds(points, margin = 0) {
+      return points.every(
+        (point) =>
+          point.x >= SVG_BOUNDS.minX + margin &&
+          point.x <= SVG_BOUNDS.maxX - margin &&
+          point.y >= SVG_BOUNDS.minY + margin &&
+          point.y <= SVG_BOUNDS.maxY - margin
+      );
+    }
+
+    function createSvgElement(tagName, attributes = {}) {
+      const element = document.createElementNS(SVG_NS, tagName);
+
+      Object.entries(attributes).forEach(([name, value]) => {
+        element.setAttribute(name, String(value));
+      });
+
+      return element;
+    }
+
+    function getMeasurements(points) {
+      const lengths = points.map((point, index) =>
+        calculateDistance(point, points[(index + 1) % points.length])
+      );
+
+      const angles = points.map((point, index) => {
+        const previous = points[(index - 1 + points.length) % points.length];
+        const next = points[(index + 1) % points.length];
+
+        return calculateAngle(previous, point, next);
+      });
+
+      const diagonals =
+        points.length === 4
+          ? [
+              calculateDistance(points[0], points[2]),
+              calculateDistance(points[1], points[3])
+            ]
+          : [];
+
+      return {
+        lengths,
+        angles,
+        diagonals,
+        area: polygonArea(points),
+        selfIntersecting: isSelfIntersectingPolygon(points)
+      };
+    }
+
+    function evaluateStageConditions(points, stageNumber, mode = "success") {
+      const measurements = getMeasurements(points);
+      const { lengths, angles, diagonals, area, selfIntersecting } = measurements;
+
+      const validShape =
+        !selfIntersecting &&
+        area > (stageNumber === 1 ? 4500 : 7000) &&
+        minimumPointDistance(points) > 55;
+
+      const lengthTolerance =
+        mode === "success"
+          ? TOLERANCE.lengthRatio
+          : mode === "snap"
+            ? TOLERANCE.snapLengthRatio
+            : TOLERANCE.nearLengthRatio;
+
+      const angleTolerance =
+        mode === "success"
+          ? TOLERANCE.angleDegrees
+          : mode === "snap"
+            ? TOLERANCE.snapAngleDegrees
+            : TOLERANCE.nearAngleDegrees;
+
+      const parallelTolerance =
+        mode === "success"
+          ? TOLERANCE.parallelCrossRatio
+          : mode === "snap"
+            ? TOLERANCE.snapParallelRatio
+            : TOLERANCE.nearParallelRatio;
+
+      if (stageNumber === 1) {
+        const equalSides =
+          relativeDifference(lengths[0], lengths[1]) <= lengthTolerance;
+        const equalBaseAngles =
+          Math.abs(angles[0] - angles[2]) <= angleTolerance;
+
+        return {
+          conditions: [
+            equalSides && validShape,
+            equalBaseAngles && validShape
+          ],
+          coreConditions: [equalSides, equalBaseAngles],
+          measurements,
+          validShape
+        };
+      }
+
+      const vectorAB = createVector(points[0], points[1]);
+      const vectorBC = createVector(points[1], points[2]);
+      const vectorCD = createVector(points[2], points[3]);
+      const vectorDA = createVector(points[3], points[0]);
+
+      const oppositeParallel =
+        normalizedCrossError(vectorAB, vectorCD) <= parallelTolerance &&
+        normalizedCrossError(vectorBC, vectorDA) <= parallelTolerance;
+
+      const oppositeEqual =
+        relativeDifference(lengths[0], lengths[2]) <= lengthTolerance &&
+        relativeDifference(lengths[1], lengths[3]) <= lengthTolerance;
+
+      const oppositeAnglesEqual =
+        Math.abs(angles[0] - angles[2]) <= angleTolerance &&
+        Math.abs(angles[1] - angles[3]) <= angleTolerance;
+
+      if (stageNumber === 2) {
+        return {
+          conditions: [
+            oppositeParallel && validShape,
+            oppositeEqual && validShape,
+            oppositeAnglesEqual && validShape,
+            !selfIntersecting && validShape
+          ],
+          coreConditions: [
+            oppositeParallel,
+            oppositeEqual,
+            oppositeAnglesEqual
+          ],
+          measurements,
+          validShape
+        };
+      }
+
+      const allRightAngles = angles.every(
+        (angle) => Math.abs(angle - 90) <= angleTolerance
+      );
+
+      const equalDiagonals =
+        relativeDifference(diagonals[0], diagonals[1]) <=
+        (mode === "success"
+          ? TOLERANCE.diagonalRatio
+          : mode === "snap"
+            ? TOLERANCE.snapLengthRatio
+            : TOLERANCE.nearLengthRatio);
+
+      return {
+        conditions: [
+          allRightAngles && validShape,
+          oppositeParallel && validShape,
+          oppositeEqual && validShape,
+          equalDiagonals && validShape,
+          !selfIntersecting && validShape
+        ],
+        coreConditions: [
+          allRightAngles,
+          oppositeParallel,
+          oppositeEqual,
+          equalDiagonals
+        ],
+        measurements,
+        validShape
+      };
+    }
+
+    function isStageSolved(points, stageNumber) {
+      const result = evaluateStageConditions(points, stageNumber, "success");
+      return result.conditions.every(Boolean);
+    }
+
+    function getFailedCoreConditionCount(points, stageNumber) {
+      const result = evaluateStageConditions(points, stageNumber, "success");
+      return result.coreConditions.filter((condition) => !condition).length;
+    }
+
+    function createSolutionPoints(stageNumber) {
+      if (stageNumber === 1) {
+        const baseLength = randomBetween(230, 360);
+        const height = randomBetween(170, 285);
+        const angle = randomBetween(-Math.PI, Math.PI);
+        const center = {
+          x: randomBetween(260, 440),
+          y: randomBetween(205, 315)
+        };
+
+        const baseDirection = {
+          x: Math.cos(angle),
+          y: Math.sin(angle)
+        };
+
+        const perpendicular = {
+          x: -baseDirection.y,
+          y: baseDirection.x
+        };
+
+        const apexDirection = randomSign();
+        const baseMidpoint = subtractPoints(
+          center,
+          scaleVector(perpendicular, (height * apexDirection) / 3)
+        );
+
+        const apex = addPoints(
+          baseMidpoint,
+          scaleVector(perpendicular, height * apexDirection)
+        );
+
+        return [
+          addPoints(baseMidpoint, scaleVector(baseDirection, -baseLength / 2)),
+          apex,
+          addPoints(baseMidpoint, scaleVector(baseDirection, baseLength / 2))
+        ];
+      }
+
+      if (stageNumber === 2) {
+        const width = randomBetween(230, 350);
+        const sideLength = randomBetween(135, 245);
+        const shearAngle = randomBetween(42, 132) * (Math.PI / 180);
+        const rotation = randomBetween(-Math.PI, Math.PI);
+        const center = {
+          x: randomBetween(275, 425),
+          y: randomBetween(215, 305)
+        };
+
+        const firstVector = rotateVector(
+          { x: width, y: 0 },
+          rotation
+        );
+
+        const secondVector = rotateVector(
+          {
+            x: Math.cos(shearAngle) * sideLength,
+            y: Math.sin(shearAngle) * sideLength
+          },
+          rotation
+        );
+
+        const halfFirst = scaleVector(firstVector, 0.5);
+        const halfSecond = scaleVector(secondVector, 0.5);
+
+        return [
+          subtractPoints(subtractPoints(center, halfFirst), halfSecond),
+          addPoints(subtractPoints(center, halfSecond), halfFirst),
+          addPoints(addPoints(center, halfFirst), halfSecond),
+          addPoints(subtractPoints(center, halfFirst), halfSecond)
+        ];
+      }
+
+      const nearSquare = Math.random() < 0.18;
+      const width = randomBetween(230, 350);
+      const height = nearSquare
+        ? width * randomBetween(0.9, 1.1)
+        : randomBetween(125, 225);
+
+      const rotationDegrees = randomBetween(-75, 75);
+      const rotation =
+        Math.abs(rotationDegrees) < 10
+          ? (rotationDegrees + 16 * randomSign()) * (Math.PI / 180)
+          : rotationDegrees * (Math.PI / 180);
+
+      const center = {
+        x: randomBetween(275, 425),
+        y: randomBetween(215, 305)
+      };
+
+      const halfWidthVector = rotateVector(
+        { x: width / 2, y: 0 },
+        rotation
+      );
+
+      const halfHeightVector = rotateVector(
+        { x: 0, y: height / 2 },
+        rotation
+      );
+
+      return [
+        subtractPoints(subtractPoints(center, halfWidthVector), halfHeightVector),
+        addPoints(subtractPoints(center, halfHeightVector), halfWidthVector),
+        addPoints(addPoints(center, halfWidthVector), halfHeightVector),
+        addPoints(subtractPoints(center, halfWidthVector), halfHeightVector)
+      ];
+    }
+
+    function createBrokenInitialPoints(solutionPoints, stageNumber) {
+      const points = clonePoints(solutionPoints);
+      const vertexCount = points.length;
+      const brokenCount =
+        stageNumber === 1
+          ? randomInteger(1, 2)
+          : Math.random() < 0.55
+            ? 1
+            : 2;
+
+      const indices = [];
+      while (indices.length < brokenCount) {
+        const candidate = randomInteger(0, vertexCount - 1);
+        if (!indices.includes(candidate)) {
+          indices.push(candidate);
+        }
+      }
+
+      indices.forEach((index, order) => {
+        const magnitude =
+          stageNumber === 1
+            ? randomBetween(48, 95)
+            : randomBetween(55, 110);
+
+        const angle =
+          randomBetween(0, Math.PI * 2) +
+          order * (Math.PI / 2);
+
+        points[index] = clampPoint({
+          x: points[index].x + Math.cos(angle) * magnitude,
+          y: points[index].y + Math.sin(angle) * magnitude
+        });
+      });
+
+      if (stageNumber > 1 && Math.random() < 0.45) {
+        const extraIndex = randomInteger(0, vertexCount - 1);
+        points[extraIndex] = clampPoint({
+          x: points[extraIndex].x + randomBetween(-36, 36),
+          y: points[extraIndex].y + randomBetween(-36, 36)
+        });
+
+        if (!indices.includes(extraIndex)) {
+          indices.push(extraIndex);
+        }
+      }
+
+      return {
+        points,
+        brokenIndices: indices.sort((a, b) => a - b)
+      };
+    }
+
+    function isInitialProblemValid(points, solutionPoints, stageNumber) {
+      if (!arePointsInsideBounds(points)) {
+        return false;
+      }
+
+      if (minimumPointDistance(points) < 58) {
+        return false;
+      }
+
+      const area = polygonArea(points);
+
+      if (area < (stageNumber === 1 ? 6500 : 9000)) {
+        return false;
+      }
+
+      if (stageNumber > 1 && isSelfIntersectingPolygon(points)) {
+        return false;
+      }
+
+      const distances = points.map((point, index) =>
+        calculateDistance(point, solutionPoints[index])
+      );
+
+      const maximumDistance = Math.max(...distances);
+      const averageDistance =
+        distances.reduce((sum, distance) => sum + distance, 0) /
+        distances.length;
+
+      if (maximumDistance < 35 || averageDistance < 20) {
+        return false;
+      }
+
+      if (isStageSolved(points, stageNumber)) {
+        return false;
+      }
+
+      if (getFailedCoreConditionCount(points, stageNumber) < 2) {
+        return false;
+      }
+
+      if (stageNumber === 1) {
+        const measurements = getMeasurements(points);
+
+        if (
+          relativeDifference(
+            measurements.lengths[0],
+            measurements.lengths[1]
+          ) <= TOLERANCE.lengthRatio
+        ) {
+          return false;
+        }
+
+        if (
+          Math.abs(
+            measurements.angles[0] - measurements.angles[2]
+          ) <= TOLERANCE.angleDegrees
+        ) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function getProblemFeatures(solutionPoints, brokenIndices, stageNumber) {
+      const center = getPolygonCenter(solutionPoints);
+      const measurements = getMeasurements(solutionPoints);
+
+      let width;
+      let height;
+      let rotation;
+
+      if (stageNumber === 1) {
+        width = measurements.lengths[2];
+        height = calculateDistance(
+          solutionPoints[1],
+          midpoint(solutionPoints[0], solutionPoints[2])
+        );
+
+        const baseVector = createVector(solutionPoints[0], solutionPoints[2]);
+        rotation = Math.atan2(baseVector.y, baseVector.x) * (180 / Math.PI);
+      } else {
+        width = measurements.lengths[0];
+        height = measurements.lengths[1];
+
+        const topVector = createVector(solutionPoints[0], solutionPoints[1]);
+        rotation = Math.atan2(topVector.y, topVector.x) * (180 / Math.PI);
+      }
+
+      return {
+        centerX: center.x,
+        centerY: center.y,
+        width,
+        height,
+        ratio: width / Math.max(height, 1),
+        rotation,
+        brokenIndices: [...brokenIndices]
+      };
+    }
+
+    function normalizeAngleDifference(first, second) {
+      let difference = Math.abs(first - second) % 360;
+
+      if (difference > 180) {
+        difference = 360 - difference;
+      }
+
+      return difference;
+    }
+
+    function areProblemFeaturesTooSimilar(first, second) {
+      const centerDistance = Math.hypot(
+        first.centerX - second.centerX,
+        first.centerY - second.centerY
+      );
+
+      const widthDifference = relativeDifference(first.width, second.width);
+      const heightDifference = relativeDifference(first.height, second.height);
+      const ratioDifference = Math.abs(first.ratio - second.ratio);
+      const rotationDifference = normalizeAngleDifference(
+        first.rotation,
+        second.rotation
+      );
+
+      const sameBrokenIndices =
+        first.brokenIndices.join(",") === second.brokenIndices.join(",");
+
+      return (
+        centerDistance < 55 &&
+        widthDifference < 0.12 &&
+        heightDifference < 0.12 &&
+        ratioDifference < 0.16 &&
+        rotationDifference < 16 &&
+        sameBrokenIndices
+      );
+    }
+
+    function generateStageProblem(stageNumber) {
+      for (let attempt = 0; attempt < 50; attempt += 1) {
+        const solutionPoints = createSolutionPoints(stageNumber);
+
+        if (
+          !arePointsInsideBounds(solutionPoints, 6) ||
+          minimumPointDistance(solutionPoints) < 80 ||
+          polygonArea(solutionPoints) < 9000 ||
+          !isStageSolved(solutionPoints, stageNumber)
+        ) {
+          continue;
+        }
+
+        const brokenData = createBrokenInitialPoints(
+          solutionPoints,
+          stageNumber
+        );
+
+        if (
+          !isInitialProblemValid(
+            brokenData.points,
+            solutionPoints,
+            stageNumber
+          )
+        ) {
+          continue;
+        }
+
+        const features = getProblemFeatures(
+          solutionPoints,
+          brokenData.brokenIndices,
+          stageNumber
+        );
+
+        const tooSimilar = Game.recentProblemFeatures[stageNumber].some(
+          (recentFeatures) =>
+            areProblemFeaturesTooSimilar(features, recentFeatures)
+        );
+
+        if (tooSimilar) {
+          continue;
+        }
+
+        return {
+          id:
+            "stage-" +
+            stageNumber +
+            "-" +
+            Date.now().toString(36) +
+            "-" +
+            Math.random().toString(36).slice(2, 8),
+          stageNumber,
+          solutionPoints: clonePoints(solutionPoints),
+          initialPoints: clonePoints(brokenData.points),
+          currentPoints: clonePoints(brokenData.points),
+          hintCount: 0,
+          startTime: Date.now(),
+          completed: false,
+          features
+        };
+      }
+
+      const fallback = fallbackProblems[stageNumber];
+
+      return {
+        id:
+          "stage-" +
+          stageNumber +
+          "-fallback-" +
+          Date.now().toString(36),
+        stageNumber,
+        solutionPoints: clonePoints(fallback.solutionPoints),
+        initialPoints: clonePoints(fallback.initialPoints),
+        currentPoints: clonePoints(fallback.initialPoints),
+        hintCount: 0,
+        startTime: Date.now(),
+        completed: false,
+        features: {
+          ...fallback.features,
+          brokenIndices: [...fallback.features.brokenIndices]
+        }
+      };
+    }
+
+    function createExactIsoscelesFromCurrent(points) {
+      const baseStart = points[0];
+      const apex = points[1];
+      const baseEnd = points[2];
+      const baseMidpoint = midpoint(baseStart, baseEnd);
+      const baseVector = createVector(baseStart, baseEnd);
+      const baseLength = vectorLength(baseVector);
+
+      if (baseLength < 80) {
+        return null;
+      }
+
+      const perpendicular = normalizeVector(perpendicularVector(baseVector));
+      const fromMidpoint = createVector(baseMidpoint, apex);
+      let signedHeight = calculateDotProduct(fromMidpoint, perpendicular);
+
+      if (Math.abs(signedHeight) < 75) {
+        signedHeight = (signedHeight >= 0 ? 1 : -1) * 75;
+      }
+
+      const correctedApex = addPoints(
+        baseMidpoint,
+        scaleVector(perpendicular, signedHeight)
+      );
+
+      const result = [
+        { ...baseStart },
+        clampPoint(correctedApex),
+        { ...baseEnd }
+      ];
+
+      if (
+        !arePointsInsideBounds(result) ||
+        polygonArea(result) < 4500 ||
+        minimumPointDistance(result) < 55
+      ) {
+        return null;
+      }
+
+      return result;
+    }
+
+    function createExactParallelogramFromCurrent(points, draggedIndex) {
+      const candidates = [];
+
+      const formulas = [
+        {
+          correctedIndex: 3,
+          point: addPoints(points[0], subtractPoints(points[2], points[1]))
+        },
+        {
+          correctedIndex: 2,
+          point: addPoints(points[1], subtractPoints(points[3], points[0]))
+        },
+        {
+          correctedIndex: 1,
+          point: addPoints(points[0], subtractPoints(points[2], points[3]))
+        },
+        {
+          correctedIndex: 0,
+          point: addPoints(points[1], subtractPoints(points[3], points[2]))
+        }
+      ];
+
+      formulas.forEach((formula) => {
+        if (formula.correctedIndex === draggedIndex) {
+          return;
+        }
+
+        const candidatePoints = clonePoints(points);
+        candidatePoints[formula.correctedIndex] = clampPoint(formula.point);
+
+        if (
+          arePointsInsideBounds(candidatePoints) &&
+          !isSelfIntersectingPolygon(candidatePoints) &&
+          polygonArea(candidatePoints) > 7000 &&
+          minimumPointDistance(candidatePoints) > 55
+        ) {
+          candidates.push({
+            points: candidatePoints,
+            movement: calculateDistance(
+              points[formula.correctedIndex],
+              candidatePoints[formula.correctedIndex]
+            )
+          });
+        }
+      });
+
+      candidates.sort((first, second) => first.movement - second.movement);
+
+      return candidates.length > 0 ? candidates[0].points : null;
+    }
+
+    function createExactRectangleFromCurrent(points) {
+      const center = getPolygonCenter(points);
+
+      let firstAxis = createVector(points[0], points[1]);
+      let firstLength = vectorLength(firstAxis);
+
+      if (firstLength < 80) {
+        firstAxis = createVector(points[3], points[2]);
+        firstLength = vectorLength(firstAxis);
+      }
+
+      if (firstLength < 80) {
+        return null;
+      }
+
+      const firstUnit = normalizeVector(firstAxis);
+      let secondUnit = normalizeVector(perpendicularVector(firstUnit));
+
+      const approximateSecondDirection = createVector(points[0], points[3]);
+
+      if (calculateDotProduct(secondUnit, approximateSecondDirection) < 0) {
+        secondUnit = scaleVector(secondUnit, -1);
+      }
+
+      const oppositeFirstLength = calculateDistance(points[3], points[2]);
+      const firstHalfLength =
+        clamp((firstLength + oppositeFirstLength) / 4, 65, 190);
+
+      const secondLengthA = Math.abs(
+        calculateDotProduct(createVector(points[0], points[3]), secondUnit)
+      );
+
+      const secondLengthB = Math.abs(
+        calculateDotProduct(createVector(points[1], points[2]), secondUnit)
+      );
+
+      const secondHalfLength =
+        clamp((secondLengthA + secondLengthB) / 4, 55, 145);
+
+      const firstHalf = scaleVector(firstUnit, firstHalfLength);
+      const secondHalf = scaleVector(secondUnit, secondHalfLength);
+
+      const result = [
+        subtractPoints(subtractPoints(center, firstHalf), secondHalf),
+        addPoints(subtractPoints(center, secondHalf), firstHalf),
+        addPoints(addPoints(center, firstHalf), secondHalf),
+        addPoints(subtractPoints(center, firstHalf), secondHalf)
+      ].map(clampPoint);
+
+      if (
+        !arePointsInsideBounds(result) ||
+        polygonArea(result) < 7000 ||
+        minimumPointDistance(result) < 55 ||
+        isSelfIntersectingPolygon(result)
+      ) {
+        return null;
+      }
+
+      return result;
+    }
+
+    function calculateSnapState(points, stageNumber) {
+      const success = evaluateStageConditions(points, stageNumber, "success");
+      const snap = evaluateStageConditions(points, stageNumber, "snap");
+      const near = evaluateStageConditions(points, stageNumber, "near");
+
+      const snapCoreCount = snap.coreConditions.filter(Boolean).length;
+      const nearCoreCount = near.coreConditions.filter(Boolean).length;
+      const totalCoreConditions = snap.coreConditions.length;
+
+      return {
+        success,
+        snap,
+        near,
+        snapCoreCount,
+        nearCoreCount,
+        totalCoreConditions,
+        isSnapReady:
+          snap.validShape && snapCoreCount === totalCoreConditions,
+        isNear:
+          near.validShape &&
+          nearCoreCount >= Math.max(1, totalCoreConditions - 1),
+        hasOneNearCondition: nearCoreCount >= 1
+      };
+    }
 
     const GeometryEngine = {
       svg: document.getElementById("geometrySvg"),
       points: [],
       labels: [],
       currentStage: 1,
-      activePointIndex: null,
-      pointerId: null,
       hintLevel: 0,
+      activePointIndex: null,
+      activePointerId: null,
+      dragStartPoint: null,
+      lastDraggedIndex: null,
+      isSnapping: false,
+      snapAnimationFrame: null,
+      proximityState: "far",
 
       initialize() {
         this.svg.addEventListener("pointermove", (event) => {
@@ -1030,39 +2024,52 @@
         });
 
         this.svg.addEventListener("pointerup", (event) => {
-          this.endDrag(event);
+          this.endDrag(event, true);
         });
 
         this.svg.addEventListener("pointercancel", (event) => {
-          this.endDrag(event);
+          this.endDrag(event, false);
         });
 
         this.svg.addEventListener("pointerleave", (event) => {
           if (event.buttons === 0) {
-            this.endDrag(event);
+            this.endDrag(event, true);
           }
         });
       },
 
-      setStage(stageNumber) {
-        this.currentStage = stageNumber;
-        this.points = stageData[stageNumber].initialPoints.map((point) => ({
-          ...point
-        }));
-        this.labels = [...stageData[stageNumber].labels];
-        this.hintLevel = 0;
+      setProblem(problem) {
+        this.cancelSnapAnimation();
+        this.currentStage = problem.stageNumber;
+        this.points = clonePoints(problem.currentPoints);
+        this.labels = [...stageData[problem.stageNumber].labels];
+        this.hintLevel = problem.hintCount;
         this.activePointIndex = null;
-        this.pointerId = null;
+        this.activePointerId = null;
+        this.dragStartPoint = null;
+        this.lastDraggedIndex = null;
+        this.proximityState = "far";
         this.render();
       },
 
-      resetPoints() {
-        this.points = stageData[this.currentStage].initialPoints.map((point) => ({
-          ...point
-        }));
+      resetPoints(points) {
+        this.cancelSnapAnimation();
+        this.points = clonePoints(points);
         this.activePointIndex = null;
-        this.pointerId = null;
+        this.activePointerId = null;
+        this.dragStartPoint = null;
+        this.lastDraggedIndex = null;
+        this.proximityState = "far";
         this.render();
+      },
+
+      cancelSnapAnimation() {
+        if (this.snapAnimationFrame !== null) {
+          cancelAnimationFrame(this.snapAnimationFrame);
+          this.snapAnimationFrame = null;
+        }
+
+        this.isSnapping = false;
       },
 
       getSvgPoint(event) {
@@ -1071,211 +2078,284 @@
         svgPoint.y = event.clientY;
 
         const matrix = this.svg.getScreenCTM();
+
         if (!matrix) {
           return { x: 0, y: 0 };
         }
 
-        const transformed = svgPoint.matrixTransform(matrix.inverse());
-
-        return {
-          x: Math.max(35, Math.min(665, transformed.x)),
-          y: Math.max(35, Math.min(465, transformed.y))
-        };
+        return clampPoint(
+          svgPoint.matrixTransform(matrix.inverse())
+        );
       },
 
       startDrag(event, index) {
+        if (
+          !Game.isStageActive ||
+          Game.isStageCompleted ||
+          Game.isTimeOver ||
+          this.isSnapping
+        ) {
+          return;
+        }
+
         event.preventDefault();
+
         this.activePointIndex = index;
-        this.pointerId = event.pointerId;
-        event.currentTarget.setPointerCapture(event.pointerId);
+        this.activePointerId = event.pointerId;
+        this.dragStartPoint = { ...this.points[index] };
+        this.lastDraggedIndex = index;
+
+        try {
+          event.currentTarget.setPointerCapture(event.pointerId);
+        } catch (error) {
+          void error;
+        }
       },
 
       handlePointerMove(event) {
         if (
           this.activePointIndex === null ||
-          this.pointerId !== event.pointerId
+          this.activePointerId !== event.pointerId ||
+          this.isSnapping ||
+          !Game.isStageActive ||
+          Game.isTimeOver ||
+          Game.isStageCompleted
         ) {
           return;
         }
 
         event.preventDefault();
+
         const point = this.getSvgPoint(event);
         this.points[this.activePointIndex] = point;
+
+        if (
+          this.dragStartPoint &&
+          calculateDistance(this.dragStartPoint, point) >= 3
+        ) {
+          Game.hasUserInteracted = true;
+        }
+
+        Game.currentProblem.currentPoints = clonePoints(this.points);
+        this.updateProximityState();
         this.render();
-        Game.evaluateStage();
+        Game.evaluateStage(false);
       },
 
-      endDrag(event) {
+      endDrag(event, attemptSnap) {
         if (
           this.activePointIndex === null ||
-          (this.pointerId !== null && event.pointerId !== this.pointerId)
+          (
+            this.activePointerId !== null &&
+            event.pointerId !== this.activePointerId
+          )
         ) {
           return;
         }
 
+        const draggedIndex = this.activePointIndex;
+
         this.activePointIndex = null;
-        this.pointerId = null;
+        this.activePointerId = null;
+        this.dragStartPoint = null;
+
+        if (
+          attemptSnap &&
+          Game.hasUserInteracted &&
+          Game.isStageActive &&
+          !Game.isTimeOver &&
+          !Game.isStageCompleted
+        ) {
+          this.attemptSnap(draggedIndex);
+        }
       },
 
-      setHintLevel(level) {
-        this.hintLevel = level;
-        this.render();
-      },
-
-      getMeasurements() {
-        const points = this.points;
-        const lengths = points.map((point, index) =>
-          calculateDistance(point, points[(index + 1) % points.length])
+      updateProximityState() {
+        const snapState = calculateSnapState(
+          this.points,
+          this.currentStage
         );
 
-        const angles = points.map((point, index) => {
-          const previous = points[(index - 1 + points.length) % points.length];
-          const next = points[(index + 1) % points.length];
-          return calculateAngle(previous, point, next);
-        });
-
-        const diagonals =
-          points.length === 4
-            ? [
-                calculateDistance(points[0], points[2]),
-                calculateDistance(points[1], points[3])
-              ]
-            : [];
-
-        return {
-          lengths,
-          angles,
-          diagonals,
-          selfIntersecting: isSelfIntersectingPolygon(points),
-          area: polygonArea(points)
-        };
+        if (snapState.isSnapReady) {
+          this.proximityState = "snap";
+        } else if (snapState.isNear) {
+          this.proximityState = "near";
+        } else if (snapState.hasOneNearCondition) {
+          this.proximityState = "approaching";
+        } else {
+          this.proximityState = "far";
+        }
       },
 
-      evaluateConditions() {
-        const measurements = this.getMeasurements();
-        const { lengths, angles, diagonals, selfIntersecting, area } =
-          measurements;
+      attemptSnap(draggedIndex) {
+        if (
+          this.isSnapping ||
+          Game.isTimeOver ||
+          Game.isStageCompleted ||
+          !Game.isStageActive
+        ) {
+          return;
+        }
 
-        const validShape =
-          !selfIntersecting &&
-          area > 4500 &&
-          lengths.every((length) => length > 55);
+        const snapState = calculateSnapState(
+          this.points,
+          this.currentStage
+        );
+
+        if (!snapState.isSnapReady) {
+          Game.evaluateStage(false);
+          return;
+        }
+
+        let targetPoints = null;
 
         if (this.currentStage === 1) {
-          const equalSides = nearlyEqual(
-            lengths[0],
-            lengths[1],
-            Math.max(8, Math.max(lengths[0], lengths[1]) * 0.035)
+          targetPoints = createExactIsoscelesFromCurrent(this.points);
+        } else if (this.currentStage === 2) {
+          targetPoints = createExactParallelogramFromCurrent(
+            this.points,
+            draggedIndex
           );
-
-          const equalBaseAngles = nearlyEqual(angles[0], angles[2], 3.5);
-
-          return {
-            conditions: [equalSides && validShape, equalBaseAngles && validShape],
-            measurements
-          };
+        } else {
+          targetPoints = createExactRectangleFromCurrent(this.points);
         }
 
-        const vectorAB = createVector(this.points[0], this.points[1]);
-        const vectorBC = createVector(this.points[1], this.points[2]);
-        const vectorCD = createVector(this.points[2], this.points[3]);
-        const vectorDA = createVector(this.points[3], this.points[0]);
-
-        const oppositeParallel =
-          areVectorsParallel(vectorAB, vectorCD, 4) &&
-          areVectorsParallel(vectorBC, vectorDA, 4);
-
-        const oppositeEqual =
-          nearlyEqual(
-            lengths[0],
-            lengths[2],
-            Math.max(9, Math.max(lengths[0], lengths[2]) * 0.04)
-          ) &&
-          nearlyEqual(
-            lengths[1],
-            lengths[3],
-            Math.max(9, Math.max(lengths[1], lengths[3]) * 0.04)
-          );
-
-        if (this.currentStage === 2) {
-          const oppositeAnglesEqual =
-            nearlyEqual(angles[0], angles[2], 4) &&
-            nearlyEqual(angles[1], angles[3], 4);
-
-          return {
-            conditions: [
-              oppositeParallel && validShape,
-              oppositeEqual && validShape,
-              oppositeAnglesEqual && validShape,
-              !selfIntersecting && validShape
-            ],
-            measurements
-          };
+        if (!targetPoints || !isStageSolved(targetPoints, this.currentStage)) {
+          Game.evaluateStage(false);
+          return;
         }
 
-        const allRightAngles = angles.every((angle) =>
-          nearlyEqual(angle, 90, 4)
+        const movements = targetPoints.map((target, index) =>
+          calculateDistance(target, this.points[index])
         );
 
-        const equalDiagonals = nearlyEqual(
-          diagonals[0],
-          diagonals[1],
-          Math.max(8, Math.max(diagonals[0], diagonals[1]) * 0.03)
-        );
+        const maximumMovement = Math.max(...movements);
+        const allowedMovement =
+          this.currentStage === 1 ? 44 : 52;
 
-        return {
-          conditions: [
-            allRightAngles && validShape,
-            oppositeParallel && validShape,
-            oppositeEqual && validShape,
-            equalDiagonals && validShape,
-            !selfIntersecting && validShape
-          ],
-          measurements
+        if (maximumMovement > allowedMovement) {
+          Game.evaluateStage(false);
+          return;
+        }
+
+        this.animateSnap(targetPoints);
+      },
+
+      animateSnap(targetPoints) {
+        this.cancelSnapAnimation();
+        this.isSnapping = true;
+        Game.isSnapping = true;
+
+        const startPoints = clonePoints(this.points);
+        const reduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        const duration = reduceMotion ? 0 : 210;
+        const startTime = performance.now();
+
+        const animate = (currentTime) => {
+          const rawProgress =
+            duration === 0
+              ? 1
+              : Math.min(1, (currentTime - startTime) / duration);
+
+          const progress =
+            1 - Math.pow(1 - rawProgress, 3);
+
+          this.points = startPoints.map((startPoint, index) => ({
+            x:
+              startPoint.x +
+              (targetPoints[index].x - startPoint.x) * progress,
+            y:
+              startPoint.y +
+              (targetPoints[index].y - startPoint.y) * progress
+          }));
+
+          Game.currentProblem.currentPoints = clonePoints(this.points);
+          this.proximityState = "snap";
+          this.render();
+
+          if (rawProgress < 1) {
+            this.snapAnimationFrame = requestAnimationFrame(animate);
+            return;
+          }
+
+          this.snapAnimationFrame = null;
+          this.points = clonePoints(targetPoints);
+          Game.currentProblem.currentPoints = clonePoints(targetPoints);
+          this.isSnapping = false;
+          Game.isSnapping = false;
+          this.render();
+          Game.evaluateStage(true);
         };
+
+        this.snapAnimationFrame = requestAnimationFrame(animate);
       },
 
       render() {
         this.svg.replaceChildren();
 
-        const backgroundGroup = createSvgElement("g");
         const guideGroup = createSvgElement("g");
         const shapeGroup = createSvgElement("g");
         const measureGroup = createSvgElement("g");
         const pointGroup = createSvgElement("g");
+        const effectGroup = createSvgElement("g");
 
         this.drawHints(guideGroup);
-        this.drawMainShape(shapeGroup);
+        this.drawShape(shapeGroup);
         this.drawMeasurements(measureGroup);
         this.drawPoints(pointGroup);
+        this.drawProximityEffect(effectGroup);
 
         this.svg.append(
-          backgroundGroup,
           guideGroup,
           shapeGroup,
           measureGroup,
-          pointGroup
+          pointGroup,
+          effectGroup
         );
       },
 
-      drawMainShape(group) {
-        const polygon = createSvgElement("polygon", {
-          points: this.points.map((point) => `${point.x},${point.y}`).join(" "),
-          class: "shape-main"
-        });
-        group.appendChild(polygon);
+      drawShape(group) {
+        const polygonClass =
+          this.proximityState === "snap"
+            ? "shape-main snap-ready"
+            : this.proximityState === "near"
+              ? "shape-main near"
+              : "shape-main";
+
+        group.appendChild(
+          createSvgElement("polygon", {
+            points: this.points
+              .map((point) => point.x + "," + point.y)
+              .join(" "),
+            class: polygonClass
+          })
+        );
 
         for (let index = 0; index < this.points.length; index += 1) {
           const nextIndex = (index + 1) % this.points.length;
-          const side = createSvgElement("line", {
-            x1: this.points[index].x,
-            y1: this.points[index].y,
-            x2: this.points[nextIndex].x,
-            y2: this.points[nextIndex].y,
-            class: `shape-side ${this.getHighlightedSideClass(index)}`
-          });
+          let className = "shape-side";
 
-          group.appendChild(side);
+          if (this.shouldHighlightSide(index)) {
+            className += " highlight";
+          } else if (
+            this.proximityState === "near" ||
+            this.proximityState === "snap"
+          ) {
+            className += " near";
+          }
+
+          group.appendChild(
+            createSvgElement("line", {
+              x1: this.points[index].x,
+              y1: this.points[index].y,
+              x2: this.points[nextIndex].x,
+              y2: this.points[nextIndex].y,
+              class: className
+            })
+          );
         }
 
         if (this.currentStage === 3) {
@@ -1301,123 +2381,137 @@
         }
       },
 
-      getHighlightedSideClass(index) {
+      shouldHighlightSide(index) {
         if (this.hintLevel < 1) {
-          return "";
+          return false;
         }
 
-        if (this.currentStage === 1 && (index === 0 || index === 1)) {
-          return "highlight";
+        if (
+          this.currentStage === 1 &&
+          (index === 0 || index === 1)
+        ) {
+          return true;
         }
 
         if (
           this.currentStage === 2 &&
-          this.hintLevel === 1 &&
-          [0, 1, 2, 3].includes(index)
+          this.hintLevel >= 1
         ) {
-          return "highlight";
+          return true;
+        }
+
+        return (
+          this.currentStage === 3 &&
+          this.hintLevel >= 2
+        );
+      },
+
+      drawHints(group) {
+        if (
+          this.hintLevel >= 3 &&
+          Game.currentProblem
+        ) {
+          group.appendChild(
+            createSvgElement("polygon", {
+              points: Game.currentProblem.solutionPoints
+                .map((point) => point.x + "," + point.y)
+                .join(" "),
+              class: "example-shape"
+            })
+          );
+        }
+
+        if (
+          this.currentStage === 2 &&
+          this.hintLevel >= 2
+        ) {
+          this.drawParallelGuides(group);
         }
 
         if (
           this.currentStage === 3 &&
-          this.hintLevel >= 2 &&
-          [0, 1, 2, 3].includes(index)
+          this.hintLevel >= 1
         ) {
-          return "highlight";
-        }
-
-        return "";
-      },
-
-      drawHints(group) {
-        const data = stageData[this.currentStage];
-
-        if (this.hintLevel >= 3) {
-          const example = createSvgElement("polygon", {
-            points: data.examplePoints
-              .map((point) => `${point.x},${point.y}`)
-              .join(" "),
-            class: "example-shape"
-          });
-          group.appendChild(example);
-        }
-
-        if (this.currentStage === 2 && this.hintLevel >= 2) {
-          this.drawParallelGuides(group);
-        }
-
-        if (this.currentStage === 3 && this.hintLevel >= 1) {
           this.points.forEach((point, index) => {
             const previous =
-              this.points[(index - 1 + this.points.length) % this.points.length];
-            const next = this.points[(index + 1) % this.points.length];
+              this.points[
+                (index - 1 + this.points.length) %
+                this.points.length
+              ];
 
-            const rightAnglePath = this.createRightAnglePath(
+            const next =
+              this.points[(index + 1) % this.points.length];
+
+            const path = this.createRightAnglePath(
               previous,
               point,
               next,
               22
             );
 
-            rightAnglePath.setAttribute("class", "right-angle-hint");
-            group.appendChild(rightAnglePath);
+            path.setAttribute("class", "right-angle-hint");
+            group.appendChild(path);
           });
         }
       },
 
       drawParallelGuides(group) {
-        const pairs = [
-          [0, 2],
-          [1, 3]
-        ];
+        [0, 1, 2, 3].forEach((sideIndex) => {
+          const start = this.points[sideIndex];
+          const end =
+            this.points[(sideIndex + 1) % this.points.length];
+          const center = midpoint(start, end);
+          const direction = normalizeVector(
+            createVector(start, end)
+          );
+          const halfLength = 48;
 
-        pairs.forEach((pair) => {
-          pair.forEach((sideIndex) => {
-            const start = this.points[sideIndex];
-            const end = this.points[(sideIndex + 1) % this.points.length];
-            const center = midpoint(start, end);
-            const direction = normalizeVector(createVector(start, end));
-            const halfLength = 48;
-
-            group.appendChild(
-              createSvgElement("line", {
-                x1: center.x - direction.x * halfLength,
-                y1: center.y - direction.y * halfLength,
-                x2: center.x + direction.x * halfLength,
-                y2: center.y + direction.y * halfLength,
-                class: "guide-line"
-              })
-            );
-          });
+          group.appendChild(
+            createSvgElement("line", {
+              x1: center.x - direction.x * halfLength,
+              y1: center.y - direction.y * halfLength,
+              x2: center.x + direction.x * halfLength,
+              y2: center.y + direction.y * halfLength,
+              class: "guide-line"
+            })
+          );
         });
       },
 
       drawMeasurements(group) {
-        const measurements = this.getMeasurements();
+        const measurements = getMeasurements(this.points);
         const center = getPolygonCenter(this.points);
 
         this.points.forEach((point, index) => {
-          const next = this.points[(index + 1) % this.points.length];
-          const sideMiddle = midpoint(point, next);
-          const towardOutside = normalizeVector({
-            x: sideMiddle.x - center.x,
-            y: sideMiddle.y - center.y
+          const next =
+            this.points[(index + 1) % this.points.length];
+          const sideCenter = midpoint(point, next);
+          const outward = normalizeVector({
+            x: sideCenter.x - center.x,
+            y: sideCenter.y - center.y
           });
 
           const label = createSvgElement("text", {
-            x: sideMiddle.x + towardOutside.x * 24,
-            y: sideMiddle.y + towardOutside.y * 24 + 5,
+            x: sideCenter.x + outward.x * 24,
+            y: sideCenter.y + outward.y * 24 + 5,
             class: "measure-label"
           });
 
-          label.textContent = measurements.lengths[index].toFixed(1);
+          label.textContent =
+            measurements.lengths[index].toFixed(1);
+
           group.appendChild(label);
         });
 
         this.points.forEach((point, index) => {
           const previous =
-            this.points[(index - 1 + this.points.length) % this.points.length];
-          const next = this.points[(index + 1) % this.points.length];
+            this.points[
+              (index - 1 + this.points.length) %
+              this.points.length
+            ];
+
+          const next =
+            this.points[(index + 1) % this.points.length];
 
           const arc = this.createAngleArc(
             previous,
@@ -1438,23 +2532,26 @@
 
           group.appendChild(arc);
 
-          const directionToCenter = normalizeVector({
+          const inward = normalizeVector({
             x: center.x - point.x,
             y: center.y - point.y
           });
 
-          const angleLabel = createSvgElement("text", {
-            x: point.x + directionToCenter.x * 51,
-            y: point.y + directionToCenter.y * 51 + 4,
+          const label = createSvgElement("text", {
+            x: point.x + inward.x * 51,
+            y: point.y + inward.y * 51 + 4,
             class: "measure-label"
           });
 
-          angleLabel.textContent = `${measurements.angles[index].toFixed(1)}°`;
-          group.appendChild(angleLabel);
+          label.textContent =
+            measurements.angles[index].toFixed(1) + "°";
+
+          group.appendChild(label);
 
           if (
             this.currentStage === 3 &&
-            nearlyEqual(measurements.angles[index], 90, 4)
+            Math.abs(measurements.angles[index] - 90) <=
+              TOLERANCE.angleDegrees
           ) {
             const rightAngle = this.createRightAnglePath(
               previous,
@@ -1462,6 +2559,7 @@
               next,
               18
             );
+
             rightAngle.setAttribute("class", "right-angle");
             group.appendChild(rightAngle);
           }
@@ -1482,13 +2580,25 @@
           y: vertex.y + vectorC.y * radius
         };
 
-        const cross = calculateCrossProduct(vectorA, vectorC);
-        const sweepFlag = cross > 0 ? 1 : 0;
-        const angle = calculateAngle(pointA, vertex, pointC);
-        const largeArcFlag = angle > 180 ? 1 : 0;
+        const sweepFlag =
+          calculateCrossProduct(vectorA, vectorC) > 0 ? 1 : 0;
 
         return createSvgElement("path", {
-          d: `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`
+          d:
+            "M " +
+            start.x +
+            " " +
+            start.y +
+            " A " +
+            radius +
+            " " +
+            radius +
+            " 0 0 " +
+            sweepFlag +
+            " " +
+            end.x +
+            " " +
+            end.y
         });
       },
 
@@ -1496,38 +2606,69 @@
         const vectorA = normalizeVector(createVector(vertex, pointA));
         const vectorC = normalizeVector(createVector(vertex, pointC));
 
-        const first = {
-          x: vertex.x + vectorA.x * size,
-          y: vertex.y + vectorA.y * size
-        };
+        const first = addPoints(
+          vertex,
+          scaleVector(vectorA, size)
+        );
 
-        const corner = {
-          x: first.x + vectorC.x * size,
-          y: first.y + vectorC.y * size
-        };
+        const corner = addPoints(
+          first,
+          scaleVector(vectorC, size)
+        );
 
-        const second = {
-          x: vertex.x + vectorC.x * size,
-          y: vertex.y + vectorC.y * size
-        };
+        const second = addPoints(
+          vertex,
+          scaleVector(vectorC, size)
+        );
 
         return createSvgElement("path", {
-          d: `M ${first.x} ${first.y} L ${corner.x} ${corner.y} L ${second.x} ${second.y}`
+          d:
+            "M " +
+            first.x +
+            " " +
+            first.y +
+            " L " +
+            corner.x +
+            " " +
+            corner.y +
+            " L " +
+            second.x +
+            " " +
+            second.y
         });
       },
 
       drawPoints(group) {
         const center = getPolygonCenter(this.points);
+        const locked =
+          !Game.isStageActive ||
+          Game.isStageCompleted ||
+          Game.isTimeOver ||
+          this.isSnapping;
 
         this.points.forEach((point, index) => {
+          if (
+            this.proximityState === "near" ||
+            this.proximityState === "snap"
+          ) {
+            group.appendChild(
+              createSvgElement("circle", {
+                cx: point.x,
+                cy: point.y,
+                r: this.proximityState === "snap" ? 20 : 16,
+                class: "point-glow"
+              })
+            );
+          }
+
           const halo = createSvgElement("circle", {
             cx: point.x,
             cy: point.y,
-            r: 27,
-            class: "point-halo",
-            tabindex: 0,
+            r: 29,
+            class: locked ? "point-halo locked" : "point-halo",
+            tabindex: locked ? -1 : 0,
             role: "button",
-            "aria-label": `${this.labels[index]} 꼭짓점`
+            "aria-label": this.labels[index] + " 꼭짓점"
           });
 
           halo.addEventListener("pointerdown", (event) => {
@@ -1535,6 +2676,10 @@
           });
 
           halo.addEventListener("keydown", (event) => {
+            if (locked || this.isSnapping) {
+              return;
+            }
+
             const step = event.shiftKey ? 10 : 4;
             let changed = true;
 
@@ -1555,27 +2700,31 @@
                 changed = false;
             }
 
-            if (changed) {
-              event.preventDefault();
-              this.points[index].x = Math.max(
-                35,
-                Math.min(665, this.points[index].x)
-              );
-              this.points[index].y = Math.max(
-                35,
-                Math.min(465, this.points[index].y)
-              );
-              this.render();
-              Game.evaluateStage();
+            if (!changed) {
+              return;
             }
+
+            event.preventDefault();
+
+            this.points[index] = clampPoint(this.points[index]);
+            this.lastDraggedIndex = index;
+            Game.hasUserInteracted = true;
+            Game.currentProblem.currentPoints = clonePoints(this.points);
+            this.updateProximityState();
+            this.render();
+            Game.evaluateStage(false);
           });
 
-          const visiblePoint = createSvgElement("circle", {
-            cx: point.x,
-            cy: point.y,
-            r: 9,
-            class: "vertex-point"
-          });
+          group.appendChild(halo);
+
+          group.appendChild(
+            createSvgElement("circle", {
+              cx: point.x,
+              cy: point.y,
+              r: 9,
+              class: "vertex-point"
+            })
+          );
 
           const outward = normalizeVector({
             x: point.x - center.x,
@@ -1589,13 +2738,42 @@
           });
 
           label.textContent = this.labels[index];
-
-          group.append(halo, visiblePoint, label);
+          group.appendChild(label);
         });
+      },
+
+      drawProximityEffect(group) {
+        if (this.proximityState !== "snap") {
+          return;
+        }
+
+        const center = getPolygonCenter(this.points);
+
+        group.appendChild(
+          createSvgElement("circle", {
+            cx: center.x,
+            cy: center.y,
+            r: 24,
+            class: "magnet-badge"
+          })
+        );
+
+        const text = createSvgElement("text", {
+          x: center.x,
+          y: center.y + 8,
+          class: "magnet-text"
+        });
+
+        text.textContent = "🧲";
+        group.appendChild(text);
       }
     };
 
     const UI = {
+      topStage: document.getElementById("topStage"),
+      problemNumber: document.getElementById("problemNumber"),
+      timerBox: document.getElementById("timerBox"),
+      timeLeft: document.getElementById("timeLeft"),
       totalScore: document.getElementById("totalScore"),
       bestScore: document.getElementById("bestScore"),
       stageScore: document.getElementById("stageScore"),
@@ -1608,18 +2786,27 @@
       hintText: document.getElementById("hintText"),
       hintBtn: document.getElementById("hintBtn"),
       resetBtn: document.getElementById("resetBtn"),
+      newProblemBtn: document.getElementById("newProblemBtn"),
       nextBtn: document.getElementById("nextBtn"),
       completionPanel: document.getElementById("completionPanel"),
+      completionTitle: document.getElementById("completionTitle"),
       completionText: document.getElementById("completionText"),
+      panelRetryBtn: document.getElementById("panelRetryBtn"),
+      panelNewProblemBtn: document.getElementById("panelNewProblemBtn"),
       closeCompletionBtn: document.getElementById("closeCompletionBtn"),
-      stageButtons: Array.from(document.querySelectorAll(".stage-btn")),
+      stageButtons: Array.from(
+        document.querySelectorAll(".stage-btn")
+      ),
 
-      updateStageInfo(stageNumber) {
+      updateStageInfo(stageNumber, problemNumber) {
         const data = stageData[stageNumber];
-        this.stageLabel.textContent = `STAGE ${stageNumber}`;
+
+        this.topStage.textContent = String(stageNumber);
+        this.problemNumber.textContent = String(problemNumber);
+        this.stageLabel.textContent =
+          "STAGE " + stageNumber + " · 문제 " + problemNumber;
         this.missionTitle.textContent = data.title;
         this.learningGoal.textContent = data.goal;
-
         this.conditionList.replaceChildren();
 
         data.conditions.forEach((conditionText, index) => {
@@ -1639,17 +2826,19 @@
         });
       },
 
-      updateConditionStates(conditionStates) {
+      updateConditionStates(conditionStates, nearStates) {
         const items = Array.from(
           this.conditionList.querySelectorAll(".condition-item")
         );
 
         items.forEach((item, index) => {
           const passed = Boolean(conditionStates[index]);
+          const near = !passed && Boolean(nearStates[index]);
           const icon = item.querySelector(".condition-icon");
 
           item.classList.toggle("pass", passed);
-          icon.textContent = passed ? "✓" : "·";
+          item.classList.toggle("near", near);
+          icon.textContent = passed ? "✓" : near ? "≈" : "·";
         });
       },
 
@@ -1664,48 +2853,91 @@
             ? ["∠A", "∠B", "∠C"]
             : ["∠A", "∠B", "∠C", "∠D"];
 
-        const lengthText = sideNames
+        const lengths = sideNames
           .map(
             (name, index) =>
-              `${name} ${measurements.lengths[index].toFixed(1)}`
+              name + " " + measurements.lengths[index].toFixed(1)
           )
           .join(" · ");
 
-        const angleText = angleNames
+        const angles = angleNames
           .map(
             (name, index) =>
-              `${name} ${measurements.angles[index].toFixed(1)}°`
+              name + " " + measurements.angles[index].toFixed(1) + "°"
           )
           .join(" · ");
 
-        let summary = `${lengthText}<br>${angleText}`;
+        let summary = lengths + "<br>" + angles;
 
         if (stageNumber === 3) {
-          summary += `<br>대각선 AC ${measurements.diagonals[0].toFixed(
-            1
-          )} · BD ${measurements.diagonals[1].toFixed(1)}`;
+          summary +=
+            "<br>대각선 AC " +
+            measurements.diagonals[0].toFixed(1) +
+            " · BD " +
+            measurements.diagonals[1].toFixed(1);
         }
 
         if (measurements.selfIntersecting) {
-          summary += `<br><span style="color: var(--danger)">주의: 도형이 자기 교차하고 있습니다.</span>`;
+          summary +=
+            '<br><span style="color:var(--danger)">주의: 도형이 자기 교차하고 있습니다.</span>';
         }
 
         this.measurementSummary.innerHTML = summary;
       },
 
+      updateTimer(seconds) {
+        this.timeLeft.textContent = seconds + "초";
+        this.timerBox.classList.toggle(
+          "timer-warning",
+          seconds <= 10 && seconds > 5
+        );
+        this.timerBox.classList.toggle(
+          "timer-danger",
+          seconds <= 5
+        );
+      },
+
       updateStageButtons(activeStage, completedStages) {
         this.stageButtons.forEach((button) => {
-          const stage = Number(button.dataset.stage);
-          button.classList.toggle("active", stage === activeStage);
-          button.classList.toggle("completed", completedStages.has(stage));
+          const stageNumber = Number(button.dataset.stage);
+
+          button.classList.toggle(
+            "active",
+            stageNumber === activeStage
+          );
+
+          button.classList.toggle(
+            "completed",
+            completedStages.has(stageNumber)
+          );
         });
       },
 
-      showCompletion(stageNumber, awardedScore, alreadyCompleted) {
-        this.completionText.textContent = alreadyCompleted
-          ? `Stage ${stageNumber}의 조건을 다시 모두 만족했습니다. 이 Stage의 점수는 이미 지급되었습니다.`
-          : `Stage ${stageNumber} 복원에 성공하여 ${awardedScore}점을 획득했습니다.`;
+      showCompletion(score, remainingSeconds) {
+        this.completionPanel.classList.remove("failure");
+        this.completionTitle.textContent = "복원 완료!";
+        this.completionText.textContent =
+          "기본 점수와 시간 보너스를 합쳐 " +
+          score +
+          "점을 획득했습니다. 남은 시간은 " +
+          remainingSeconds +
+          "초입니다.";
 
+        this.panelRetryBtn.hidden = true;
+        this.panelNewProblemBtn.textContent = "다음 랜덤 문제";
+        this.closeCompletionBtn.hidden = false;
+        this.completionPanel.hidden = false;
+      },
+
+      showFailure() {
+        this.completionPanel.classList.add("failure");
+        this.completionTitle.textContent = "시간 종료";
+        this.completionText.textContent =
+          "제한 시간이 끝났습니다. 같은 문제를 다시 도전하거나 새 문제를 시작하세요.";
+
+        this.panelRetryBtn.hidden = false;
+        this.panelNewProblemBtn.textContent = "새 문제";
+        this.closeCompletionBtn.hidden = true;
         this.completionPanel.hidden = false;
       },
 
@@ -1716,20 +2948,29 @@
 
     const Game = {
       currentStage: 1,
-      totalScore: 0,
-      bestScore: 0,
-      stageScores: {
-        1: 100,
-        2: 100,
-        3: 100
-      },
-      hintLevels: {
+      currentProblem: null,
+      problemCounts: {
         1: 0,
         2: 0,
         3: 0
       },
+      totalScore: 0,
+      bestScore: 0,
       completedStages: new Set(),
-      completionShownForCurrentShape: false,
+      completedProblemIds: new Set(),
+      recentProblemFeatures: {
+        1: [],
+        2: [],
+        3: []
+      },
+      timerIntervalId: null,
+      remainingSeconds: 40,
+      stageStartTime: 0,
+      hasUserInteracted: false,
+      isStageActive: false,
+      isStageCompleted: false,
+      isTimeOver: false,
+      isSnapping: false,
 
       initialize() {
         this.loadStorage();
@@ -1740,19 +2981,28 @@
       },
 
       loadStorage() {
-        const savedBest = Number(localStorage.getItem(STORAGE_KEYS.bestScore));
-        this.bestScore = Number.isFinite(savedBest) ? savedBest : 0;
+        const storedBest = Number(
+          localStorage.getItem(STORAGE_KEYS.bestScore)
+        );
+
+        this.bestScore = Number.isFinite(storedBest)
+          ? storedBest
+          : 0;
 
         try {
-          const savedStages = JSON.parse(
-            localStorage.getItem(STORAGE_KEYS.completedStages) || "[]"
+          const storedStages = JSON.parse(
+            localStorage.getItem(
+              STORAGE_KEYS.completedStages
+            ) || "[]"
           );
 
-          if (Array.isArray(savedStages)) {
+          if (Array.isArray(storedStages)) {
             this.completedStages = new Set(
-              savedStages
+              storedStages
                 .map(Number)
-                .filter((stage) => [1, 2, 3].includes(stage))
+                .filter((stageNumber) =>
+                  [1, 2, 3].includes(stageNumber)
+                )
             );
           }
         } catch (error) {
@@ -1768,7 +3018,9 @@
 
         localStorage.setItem(
           STORAGE_KEYS.completedStages,
-          JSON.stringify(Array.from(this.completedStages).sort())
+          JSON.stringify(
+            Array.from(this.completedStages).sort()
+          )
         );
       },
 
@@ -1784,12 +3036,28 @@
         });
 
         UI.resetBtn.addEventListener("click", () => {
-          this.resetCurrentStage();
+          this.resetCurrentProblem();
+        });
+
+        UI.newProblemBtn.addEventListener("click", () => {
+          this.startNewProblem();
         });
 
         UI.nextBtn.addEventListener("click", () => {
-          const nextStage = this.currentStage === 3 ? 1 : this.currentStage + 1;
+          const nextStage =
+            this.currentStage === 3
+              ? 1
+              : this.currentStage + 1;
+
           this.switchStage(nextStage);
+        });
+
+        UI.panelRetryBtn.addEventListener("click", () => {
+          this.resetCurrentProblem();
+        });
+
+        UI.panelNewProblemBtn.addEventListener("click", () => {
+          this.startNewProblem();
         });
 
         UI.closeCompletionBtn.addEventListener("click", () => {
@@ -1798,117 +3066,332 @@
       },
 
       switchStage(stageNumber) {
+        this.stopTimer();
+        GeometryEngine.cancelSnapAnimation();
+
         this.currentStage = stageNumber;
-        this.completionShownForCurrentShape = false;
-        UI.hideCompletion();
-
-        GeometryEngine.setStage(stageNumber);
-        GeometryEngine.setHintLevel(this.hintLevels[stageNumber]);
-
-        UI.updateStageInfo(stageNumber);
-        UI.updateStageButtons(stageNumber, this.completedStages);
-        UI.stageScore.textContent = String(this.stageScores[stageNumber]);
-        UI.hintText.textContent =
-          this.hintLevels[stageNumber] === 0
-            ? "아직 힌트를 사용하지 않았습니다."
-            : stageData[stageNumber].hints[
-                this.hintLevels[stageNumber] - 1
-              ];
-
-        UI.hintBtn.disabled = this.hintLevels[stageNumber] >= 3;
-        UI.hintBtn.textContent =
-          this.hintLevels[stageNumber] >= 3
-            ? "힌트 모두 사용"
-            : `힌트 보기 (${this.hintLevels[stageNumber]}/3)`;
-
-        UI.nextBtn.textContent =
-          stageNumber === 3 ? "Stage 1로 이동" : "다음 Stage";
-
-        this.evaluateStage();
+        this.startNewProblem();
       },
 
-      resetCurrentStage() {
-        GeometryEngine.resetPoints();
-        this.completionShownForCurrentShape = false;
+      startNewProblem() {
+        this.stopTimer();
+        GeometryEngine.cancelSnapAnimation();
         UI.hideCompletion();
-        UI.feedbackMessage.textContent =
-          "도형을 초기 상태로 되돌렸습니다. 다시 복원해 보세요.";
-        this.evaluateStage();
+
+        const problem = generateStageProblem(this.currentStage);
+
+        this.problemCounts[this.currentStage] += 1;
+        this.currentProblem = problem;
+
+        const recent =
+          this.recentProblemFeatures[this.currentStage];
+
+        recent.push({
+          ...problem.features,
+          brokenIndices: [...problem.features.brokenIndices]
+        });
+
+        if (recent.length > 5) {
+          recent.shift();
+        }
+
+        this.prepareProblemState();
       },
 
-      useHint() {
-        const currentLevel = this.hintLevels[this.currentStage];
-
-        if (currentLevel >= 3) {
+      resetCurrentProblem() {
+        if (!this.currentProblem) {
           return;
         }
 
-        const nextLevel = currentLevel + 1;
-        this.hintLevels[this.currentStage] = nextLevel;
-        this.stageScores[this.currentStage] = Math.max(
-          40,
-          this.stageScores[this.currentStage] - 20
+        this.stopTimer();
+        GeometryEngine.cancelSnapAnimation();
+        UI.hideCompletion();
+
+        this.currentProblem.currentPoints = clonePoints(
+          this.currentProblem.initialPoints
         );
 
-        GeometryEngine.setHintLevel(nextLevel);
+        this.currentProblem.hintCount = 0;
+        this.currentProblem.startTime = Date.now();
+        this.currentProblem.completed = false;
+
+        this.prepareProblemState(false);
+      },
+
+      prepareProblemState(updateProblemNumber = true) {
+        this.hasUserInteracted = false;
+        this.isStageActive = true;
+        this.isStageCompleted = false;
+        this.isTimeOver = false;
+        this.isSnapping = false;
+        this.stageStartTime = Date.now();
+        this.currentProblem.startTime = this.stageStartTime;
+        this.remainingSeconds = TIME_LIMITS[this.currentStage];
+
+        GeometryEngine.setProblem(this.currentProblem);
+
+        UI.updateStageInfo(
+          this.currentStage,
+          this.problemCounts[this.currentStage]
+        );
+
+        UI.updateStageButtons(
+          this.currentStage,
+          this.completedStages
+        );
 
         UI.stageScore.textContent = String(
-          this.stageScores[this.currentStage]
+          100 - this.currentProblem.hintCount * 20
         );
 
         UI.hintText.textContent =
-          stageData[this.currentStage].hints[nextLevel - 1];
+          "아직 힌트를 사용하지 않았습니다.";
 
-        UI.hintBtn.textContent =
-          nextLevel >= 3 ? "힌트 모두 사용" : `힌트 보기 (${nextLevel}/3)`;
+        UI.hintBtn.disabled = false;
+        UI.hintBtn.textContent = "힌트 보기 (0/3)";
+        UI.resetBtn.disabled = false;
+        UI.newProblemBtn.disabled = false;
 
-        UI.hintBtn.disabled = nextLevel >= 3;
+        UI.nextBtn.textContent =
+          this.currentStage === 3
+            ? "Stage 1로 이동"
+            : "다음 Stage";
+
         UI.feedbackMessage.textContent =
-          `힌트 ${nextLevel}단계를 사용해 20점이 감점되었습니다.`;
+          "아직 멀었습니다. 꼭짓점을 움직여 도형의 성질을 맞춰 보세요.";
 
-        this.evaluateStage();
+        UI.updateTimer(this.remainingSeconds);
+        this.evaluateStage(false);
+        this.startTimer();
+
+        void updateProblemNumber;
       },
 
-      evaluateStage() {
-        const result = GeometryEngine.evaluateConditions();
-        const allPassed = result.conditions.every(Boolean);
+      startTimer() {
+        this.stopTimer();
 
-        UI.updateConditionStates(result.conditions);
-        UI.updateMeasurements(this.currentStage, result.measurements);
-
-        const passedCount = result.conditions.filter(Boolean).length;
-        const totalConditions = result.conditions.length;
-
-        if (allPassed) {
-          UI.feedbackMessage.innerHTML =
-            `<span style="color: var(--success); font-weight: 900;">모든 조건을 만족했습니다. 도형 복원 성공!</span>`;
-
-          if (!this.completionShownForCurrentShape) {
-            this.completionShownForCurrentShape = true;
-            this.completeCurrentStage();
+        this.timerIntervalId = window.setInterval(() => {
+          if (
+            !this.isStageActive ||
+            this.isStageCompleted ||
+            this.isTimeOver
+          ) {
+            return;
           }
-        } else {
-          this.completionShownForCurrentShape = false;
 
-          if (result.measurements.selfIntersecting) {
-            UI.feedbackMessage.innerHTML =
-              `<span style="color: var(--danger); font-weight: 800;">변이 서로 교차하지 않도록 꼭짓점 순서를 바로잡으세요.</span>`;
-          } else if (result.measurements.area <= 4500) {
-            UI.feedbackMessage.textContent =
-              "도형이 너무 작거나 납작합니다. 꼭짓점 사이를 더 넓혀 보세요.";
-          } else {
-            UI.feedbackMessage.textContent =
-              `${totalConditions}개 조건 중 ${passedCount}개를 만족했습니다. 조건 표시를 보며 조금 더 조절하세요.`;
+          const elapsed =
+            (Date.now() - this.stageStartTime) / 1000;
+
+          const nextRemaining = Math.max(
+            0,
+            Math.ceil(
+              TIME_LIMITS[this.currentStage] - elapsed
+            )
+          );
+
+          if (nextRemaining !== this.remainingSeconds) {
+            this.remainingSeconds = nextRemaining;
+            UI.updateTimer(this.remainingSeconds);
           }
+
+          if (this.remainingSeconds <= 0) {
+            this.handleTimeOver();
+          }
+        }, 200);
+      },
+
+      stopTimer() {
+        if (this.timerIntervalId !== null) {
+          clearInterval(this.timerIntervalId);
+          this.timerIntervalId = null;
         }
       },
 
-      completeCurrentStage() {
-        const alreadyCompleted = this.completedStages.has(this.currentStage);
-        let awardedScore = 0;
+      handleTimeOver() {
+        if (
+          this.isTimeOver ||
+          this.isStageCompleted
+        ) {
+          return;
+        }
 
-        if (!alreadyCompleted) {
-          awardedScore = this.stageScores[this.currentStage];
+        this.stopTimer();
+        GeometryEngine.cancelSnapAnimation();
+
+        this.remainingSeconds = 0;
+        this.isTimeOver = true;
+        this.isStageActive = false;
+        this.isSnapping = false;
+
+        UI.updateTimer(0);
+        UI.feedbackMessage.innerHTML =
+          '<span style="color:var(--danger);font-weight:900">시간 종료</span>';
+
+        GeometryEngine.render();
+        UI.showFailure();
+      },
+
+      useHint() {
+        if (
+          !this.currentProblem ||
+          this.currentProblem.hintCount >= 3 ||
+          this.isTimeOver ||
+          this.isStageCompleted
+        ) {
+          return;
+        }
+
+        this.currentProblem.hintCount += 1;
+        GeometryEngine.hintLevel =
+          this.currentProblem.hintCount;
+        GeometryEngine.render();
+
+        const baseScore = Math.max(
+          40,
+          100 - this.currentProblem.hintCount * 20
+        );
+
+        UI.stageScore.textContent = String(baseScore);
+        UI.hintText.textContent =
+          stageData[this.currentStage].hints[
+            this.currentProblem.hintCount - 1
+          ];
+
+        UI.hintBtn.textContent =
+          this.currentProblem.hintCount >= 3
+            ? "힌트 모두 사용"
+            : "힌트 보기 (" +
+              this.currentProblem.hintCount +
+              "/3)";
+
+        UI.hintBtn.disabled =
+          this.currentProblem.hintCount >= 3;
+
+        UI.feedbackMessage.textContent =
+          "힌트를 사용해 기본 점수에서 20점이 감점되었습니다.";
+      },
+
+      evaluateStage(fromSnap) {
+        if (!this.currentProblem) {
+          return;
+        }
+
+        const snapState = calculateSnapState(
+          GeometryEngine.points,
+          this.currentStage
+        );
+
+        UI.updateConditionStates(
+          snapState.success.conditions,
+          snapState.near.conditions
+        );
+
+        UI.updateMeasurements(
+          this.currentStage,
+          snapState.success.measurements
+        );
+
+        if (
+          this.isTimeOver ||
+          this.isStageCompleted ||
+          !this.isStageActive ||
+          this.isSnapping ||
+          GeometryEngine.isSnapping
+        ) {
+          return;
+        }
+
+        const protectedTime =
+          Date.now() - this.stageStartTime < 500;
+
+        const allSolved =
+          snapState.success.conditions.every(Boolean);
+
+        if (
+          allSolved &&
+          this.hasUserInteracted &&
+          !protectedTime
+        ) {
+          if (fromSnap || GeometryEngine.activePointIndex === null) {
+            this.completeCurrentProblem();
+          }
+
+          return;
+        }
+
+        if (snapState.isSnapReady) {
+          UI.feedbackMessage.innerHTML =
+            '<span style="color:var(--primary);font-weight:900">🧲 자석 스냅 가능 상태입니다. 꼭짓점을 놓아 보세요.</span>';
+          return;
+        }
+
+        if (snapState.isNear) {
+          UI.feedbackMessage.innerHTML =
+            '<span style="color:var(--warning);font-weight:800">거의 맞았습니다. 조금만 더 조절해 보세요.</span>';
+          return;
+        }
+
+        if (snapState.hasOneNearCondition) {
+          UI.feedbackMessage.textContent =
+            "조건 하나가 가까워지고 있습니다.";
+          return;
+        }
+
+        if (snapState.success.measurements.selfIntersecting) {
+          UI.feedbackMessage.innerHTML =
+            '<span style="color:var(--danger);font-weight:800">변이 서로 교차하지 않도록 꼭짓점을 조절하세요.</span>';
+          return;
+        }
+
+        UI.feedbackMessage.textContent =
+          "아직 멀었습니다. 조건 표시를 보며 도형을 조절하세요.";
+      },
+
+      completeCurrentProblem() {
+        if (
+          this.isStageCompleted ||
+          this.isTimeOver ||
+          !this.isStageActive ||
+          !this.hasUserInteracted ||
+          Date.now() - this.stageStartTime < 500
+        ) {
+          return;
+        }
+
+        if (
+          !isStageSolved(
+            GeometryEngine.points,
+            this.currentStage
+          )
+        ) {
+          return;
+        }
+
+        this.isStageCompleted = true;
+        this.isStageActive = false;
+        this.currentProblem.completed = true;
+        this.currentProblem.currentPoints =
+          clonePoints(GeometryEngine.points);
+
+        this.stopTimer();
+
+        const baseScore = Math.max(
+          40,
+          100 - this.currentProblem.hintCount * 20
+        );
+
+        const timeBonus = this.remainingSeconds * 2;
+        const awardedScore = baseScore + timeBonus;
+
+        if (
+          !this.completedProblemIds.has(
+            this.currentProblem.id
+          )
+        ) {
+          this.completedProblemIds.add(
+            this.currentProblem.id
+          );
+
           this.totalScore += awardedScore;
           this.completedStages.add(this.currentStage);
 
@@ -1918,19 +3401,28 @@
 
           this.saveStorage();
           this.updateScoreDisplay();
-          UI.updateStageButtons(this.currentStage, this.completedStages);
+
+          UI.updateStageButtons(
+            this.currentStage,
+            this.completedStages
+          );
         }
 
+        UI.feedbackMessage.innerHTML =
+          '<span style="color:var(--success);font-weight:900">복원 완료</span>';
+
+        GeometryEngine.render();
         UI.showCompletion(
-          this.currentStage,
           awardedScore,
-          alreadyCompleted
+          this.remainingSeconds
         );
       },
 
       updateScoreDisplay() {
-        UI.totalScore.textContent = String(this.totalScore);
-        UI.bestScore.textContent = String(this.bestScore);
+        UI.totalScore.textContent =
+          String(this.totalScore);
+        UI.bestScore.textContent =
+          String(this.bestScore);
       }
     };
 
@@ -1938,3 +3430,4 @@
   </script>
 </body>
 </html>
+```

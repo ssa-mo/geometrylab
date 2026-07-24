@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <title>도형 복원 연구소</title>
+  <style>
+    :root {
+      --bg: #061b1c;
+      --panel: #0b292a;
+      --panel-light: #103536;
+      --line: #2d6868;
+      --primary: #55e0cf;
+      --primary-dark: #1ba99b;
+      --text: #ecfffc;
+      --muted: #a5cfca;
+      --success: #65e78e;
+      --warning: #ffd166;
+      --danger: #ff7b7b;
+      --shape-fill: rgba(85, 224, 207, 0.13);
+      --shape-stroke: #63ead9;
+      --point: #ffe28a;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(42, 121, 119, 0.22), transparent 35%),
+        linear-gradient(145deg, #041314, var(--bg));
+      color: var(--text);
+      font-family:
+        "Pretendard",
+        "Noto Sans KR",
+        "Apple SD Gothic Neo",
+        Arial,
+        sans-serif;
+    }
+
+    body {
+      padding: 18px;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 16px 18px;
+      border: 1px solid rgba(99, 234, 217, 0.2);
+      border-radius: 18px;
+      background: rgba(7, 31, 32, 0.92);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .title-wrap {
+      min-width: 0;
+    }
+
+    .title-wrap h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: -0.04em;
+    }
+
+    .title-wrap p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .score-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .score-box {
+      min-width: 102px;
+      padding: 10px 12px;
+      border: 1px solid rgba(85, 224, 207, 0.24);
+      border-radius: 12px;
+      background: rgba(16, 53, 54, 0.92);
+      text-align: center;
+    }
+
+    .score-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .score-box strong {
+      display: block;
+      margin-top: 2px;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .stage-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+
+    .stage-btn,
+    .action-btn {
+      border: 1px solid rgba(99, 234, 217, 0.28);
+      border-radius: 12px;
+      color: var(--text);
+      background: var(--panel);
+      cursor: pointer;
+      transition:
+        border-color 0.16s ease,
+        background 0.16s ease,
+        transform 0.16s ease;
+    }
+
+    .stage-btn {
+      position: relative;
+      padding: 12px 10px;
+      font-weight: 800;
+    }
+
+    .stage-btn:hover,
+    .action-btn:hover {
+      border-color: var(--primary);
+      background: var(--panel-light);
+    }
+
+    .stage-btn:active,
+    .action-btn:active {
+      transform: translateY(1px);
+    }
+
+    .stage-btn.active {
+      border-color: var(--primary);
+      color: #031b1a;
+      background: linear-gradient(135deg, #69eadb, #34c8b8);
+    }
+
+    .stage-btn.completed::after {
+      content: "✓";
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      display: grid;
+      width: 20px;
+      height: 20px;
+      place-items: center;
+      border-radius: 50%;
+      color: #05251e;
+      background: var(--success);
+      font-size: 0.76rem;
+      font-weight: 900;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(310px, 0.8fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .workspace-card,
+    .mission-card,
+    .bottom-panel {
+      border: 1px solid rgba(99, 234, 217, 0.2);
+      border-radius: 18px;
+      background: rgba(7, 31, 32, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .workspace-card {
+      position: relative;
+      min-height: 560px;
+      overflow: hidden;
+    }
+
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid rgba(99, 234, 217, 0.15);
+    }
+
+    .workspace-header strong {
+      font-size: 1rem;
+    }
+
+    .workspace-header span {
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-align: right;
+    }
+
+    .svg-wrap {
+      position: relative;
+      min-height: 505px;
+      background:
+        linear-gradient(rgba(85, 224, 207, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(85, 224, 207, 0.045) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(20, 86, 84, 0.22), transparent 62%);
+      background-size: 30px 30px, 30px 30px, auto;
+      touch-action: none;
+      user-select: none;
+    }
+
+    #geometrySvg {
+      display: block;
+      width: 100%;
+      min-height: 505px;
+      touch-action: none;
+      cursor: default;
+    }
+
+    .mission-card {
+      padding: 18px;
+    }
+
+    .stage-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 9px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: rgba(85, 224, 207, 0.1);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .mission-card h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      line-height: 1.3;
+      letter-spacing: -0.04em;
+    }
+
+    .learning-goal {
+      margin: 10px 0 16px;
+      padding: 11px 12px;
+      border-left: 3px solid var(--primary-dark);
+      border-radius: 7px;
+      color: var(--muted);
+      background: rgba(16, 53, 54, 0.66);
+      font-size: 0.91rem;
+      line-height: 1.55;
+    }
+
+    .section-title {
+      margin: 17px 0 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .condition-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .condition-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 9px;
+      align-items: center;
+      min-height: 48px;
+      padding: 9px 10px;
+      border: 1px solid rgba(165, 207, 202, 0.15);
+      border-radius: 11px;
+      color: var(--muted);
+      background: rgba(9, 40, 41, 0.8);
+      line-height: 1.35;
+      transition:
+        color 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease;
+    }
+
+    .condition-item.pass {
+      border-color: rgba(101, 231, 142, 0.62);
+      color: var(--text);
+      background: rgba(34, 104, 67, 0.24);
+    }
+
+    .condition-icon {
+      display: grid;
+      width: 25px;
+      height: 25px;
+      place-items: center;
+      border: 1px solid rgba(165, 207, 202, 0.35);
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .condition-item.pass .condition-icon {
+      border-color: var(--success);
+      color: #062218;
+      background: var(--success);
+    }
+
+    .stage-score {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: rgba(16, 53, 54, 0.74);
+    }
+
+    .stage-score span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .stage-score strong {
+      color: var(--warning);
+      font-size: 1.18rem;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .action-btn {
+      min-height: 46px;
+      padding: 10px 12px;
+      font-weight: 800;
+    }
+
+    .action-btn.primary {
+      grid-column: 1 / -1;
+      border-color: transparent;
+      color: #032522;
+      background: linear-gradient(135deg, #67e9da, #31c0b1);
+    }
+
+    .action-btn.primary:hover {
+      background: linear-gradient(135deg, #7af1e3, #46d3c3);
+    }
+
+    .action-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.46;
+      transform: none;
+    }
+
+    .hint-text {
+      min-height: 54px;
+      margin-top: 11px;
+      padding: 10px 11px;
+      border: 1px dashed rgba(255, 209, 102, 0.45);
+      border-radius: 10px;
+      color: #ffe6a4;
+      background: rgba(113, 83, 18, 0.14);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .bottom-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+      padding: 15px 17px;
+    }
+
+    .feedback-box,
+    .measure-box {
+      min-width: 0;
+    }
+
+    .bottom-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    #feedbackMessage {
+      min-height: 45px;
+      display: flex;
+      align-items: center;
+      line-height: 1.5;
+    }
+
+    #measurementSummary {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .completion-panel {
+      position: absolute;
+      z-index: 20;
+      top: 18px;
+      left: 50%;
+      width: min(360px, calc(100% - 30px));
+      padding: 16px;
+      border: 1px solid rgba(101, 231, 142, 0.7);
+      border-radius: 15px;
+      background: rgba(5, 42, 32, 0.96);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      transform: translateX(-50%);
+    }
+
+    .completion-panel[hidden] {
+      display: none;
+    }
+
+    .completion-panel strong {
+      display: block;
+      color: var(--success);
+      font-size: 1.2rem;
+    }
+
+    .completion-panel p {
+      margin: 7px 0 12px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .completion-panel button {
+      padding: 8px 18px;
+      border: 0;
+      border-radius: 9px;
+      color: #03231c;
+      background: var(--success);
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .shape-main {
+      fill: var(--shape-fill);
+      stroke: var(--shape-stroke);
+      stroke-width: 4;
+      stroke-linejoin: round;
+    }
+
+    .shape-side {
+      stroke: transparent;
+      stroke-width: 12;
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+
+    .shape-side.highlight {
+      stroke: rgba(255, 209, 102, 0.8);
+    }
+
+    .diagonal-line {
+      stroke: rgba(255, 255, 255, 0.48);
+      stroke-width: 2;
+      stroke-dasharray: 8 7;
+      pointer-events: none;
+    }
+
+    .guide-line {
+      stroke: rgba(255, 209, 102, 0.85);
+      stroke-width: 3;
+      stroke-dasharray: 10 7;
+      pointer-events: none;
+    }
+
+    .example-shape {
+      fill: rgba(255, 209, 102, 0.045);
+      stroke: rgba(255, 209, 102, 0.72);
+      stroke-width: 3;
+      stroke-dasharray: 11 8;
+      pointer-events: none;
+    }
+
+    .point-halo {
+      fill: transparent;
+      cursor: grab;
+      pointer-events: all;
+      touch-action: none;
+    }
+
+    .point-halo:active {
+      cursor: grabbing;
+    }
+
+    .vertex-point {
+      fill: var(--point);
+      stroke: #5b4313;
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .vertex-label {
+      fill: var(--text);
+      font-size: 14px;
+      font-weight: 900;
+      text-anchor: middle;
+      pointer-events: none;
+      paint-order: stroke;
+      stroke: #04191a;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+
+    .measure-label {
+      fill: #d8fffa;
+      font-size: 13px;
+      font-weight: 800;
+      text-anchor: middle;
+      pointer-events: none;
+      paint-order: stroke;
+      stroke: #04191a;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+
+    .angle-arc {
+      fill: none;
+      stroke: rgba(164, 241, 230, 0.76);
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .angle-arc.highlight {
+      stroke: var(--warning);
+      stroke-width: 6;
+    }
+
+    .right-angle {
+      fill: none;
+      stroke: var(--success);
+      stroke-width: 3;
+      pointer-events: none;
+    }
+
+    .right-angle-hint {
+      fill: rgba(255, 209, 102, 0.12);
+      stroke: var(--warning);
+      stroke-width: 4;
+      pointer-events: none;
+    }
+
+    @media (max-width: 850px) {
+      body {
+        padding: 10px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .score-area {
+        justify-content: flex-start;
+      }
+
+      .score-box {
+        flex: 1;
+      }
+
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-card {
+        min-height: auto;
+      }
+
+      .svg-wrap,
+      #geometrySvg {
+        min-height: 430px;
+      }
+
+      .bottom-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .stage-tabs {
+        gap: 6px;
+      }
+
+      .stage-btn {
+        padding: 11px 5px;
+        font-size: 0.83rem;
+      }
+
+      .stage-btn.completed::after {
+        top: 3px;
+        right: 3px;
+        width: 17px;
+        height: 17px;
+        font-size: 0.66rem;
+      }
+
+      .workspace-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .workspace-header span {
+        text-align: left;
+      }
+
+      .mission-card {
+        padding: 15px;
+      }
+
+      .button-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .action-btn.primary {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="title-wrap">
+        <h1>🔬 도형 복원 연구소</h1>
+        <p>꼭짓점을 움직여 손상된 도형의 성질을 복원하세요.</p>
+      </div>
+
+      <div class="score-area">
+        <div class="score-box">
+          <span>현재 총점</span>
+          <strong id="totalScore">0</strong>
+        </div>
+        <div class="score-box">
+          <span>최고 총점</span>
+          <strong id="bestScore">0</strong>
+        </div>
+      </div>
+    </header>
+
+    <nav class="stage-tabs" aria-label="단계 선택">
+      <button class="stage-btn active" data-stage="1" type="button">Stage 1</button>
+      <button class="stage-btn" data-stage="2" type="button">Stage 2</button>
+      <button class="stage-btn" data-stage="3" type="button">Stage 3</button>
+    </nav>
+
+    <section class="main-grid">
+      <article class="workspace-card">
+        <div class="workspace-header">
+          <strong>도형 조작 작업대</strong>
+          <span>노란 꼭짓점을 마우스 또는 손가락으로 드래그하세요.</span>
+        </div>
+
+        <div class="svg-wrap">
+          <svg
+            id="geometrySvg"
+            viewBox="0 0 700 500"
+            role="img"
+            aria-label="도형을 직접 조작하는 작업 공간"
+          ></svg>
+
+          <div id="completionPanel" class="completion-panel" hidden>
+            <strong>복원 완료!</strong>
+            <p id="completionText"></p>
+            <button id="closeCompletionBtn" type="button">확인</button>
+          </div>
+        </div>
+      </article>
+
+      <aside class="mission-card">
+        <div id="stageLabel" class="stage-label">STAGE 1</div>
+        <h2 id="missionTitle">이등변삼각형 복원</h2>
+        <div id="learningGoal" class="learning-goal"></div>
+
+        <div class="section-title">실시간 복원 조건</div>
+        <div id="conditionList" class="condition-list"></div>
+
+        <div class="stage-score">
+          <span>이번 Stage 점수</span>
+          <strong><span id="stageScore">100</span>점</strong>
+        </div>
+
+        <div class="button-grid">
+          <button id="hintBtn" class="action-btn" type="button">힌트 보기</button>
+          <button id="resetBtn" class="action-btn" type="button">초기화</button>
+          <button id="nextBtn" class="action-btn primary" type="button">
+            다음 Stage
+          </button>
+        </div>
+
+        <div id="hintText" class="hint-text">
+          아직 힌트를 사용하지 않았습니다.
+        </div>
+      </aside>
+    </section>
+
+    <section class="bottom-panel">
+      <div class="feedback-box">
+        <div class="bottom-label">실시간 피드백</div>
+        <div id="feedbackMessage">
+          꼭짓점을 움직이며 조건 표시가 바뀌는지 확인해 보세요.
+        </div>
+      </div>
+
+      <div class="measure-box">
+        <div class="bottom-label">현재 측정값</div>
+        <div id="measurementSummary"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const STORAGE_KEYS = {
+      bestScore: "geometryRepairLabBestScore",
+      completedStages: "geometryRepairLabCompletedStages"
+    };
+
+    function calculateDistance(pointA, pointB) {
+      return Math.hypot(pointB.x - pointA.x, pointB.y - pointA.y);
+    }
+
+    function createVector(pointA, pointB) {
+      return {
+        x: pointB.x - pointA.x,
+        y: pointB.y - pointA.y
+      };
+    }
+
+    function calculateDotProduct(vectorA, vectorB) {
+      return vectorA.x * vectorB.x + vectorA.y * vectorB.y;
+    }
+
+    function calculateCrossProduct(vectorA, vectorB) {
+      return vectorA.x * vectorB.y - vectorA.y * vectorB.x;
+    }
+
+    function calculateAngle(pointA, vertex, pointC) {
+      const vectorA = createVector(vertex, pointA);
+      const vectorC = createVector(vertex, pointC);
+      const lengthA = Math.hypot(vectorA.x, vectorA.y);
+      const lengthC = Math.hypot(vectorC.x, vectorC.y);
+
+      if (lengthA === 0 || lengthC === 0) {
+        return 0;
+      }
+
+      let cosine =
+        calculateDotProduct(vectorA, vectorC) / (lengthA * lengthC);
+
+      cosine = Math.max(-1, Math.min(1, cosine));
+      return Math.acos(cosine) * (180 / Math.PI);
+    }
+
+    function nearlyEqual(valueA, valueB, tolerance) {
+      return Math.abs(valueA - valueB) <= tolerance;
+    }
+
+    function areVectorsParallel(vectorA, vectorB, toleranceDegrees = 5) {
+      const lengthA = Math.hypot(vectorA.x, vectorA.y);
+      const lengthB = Math.hypot(vectorB.x, vectorB.y);
+
+      if (lengthA === 0 || lengthB === 0) {
+        return false;
+      }
+
+      const normalizedCross =
+        Math.abs(calculateCrossProduct(vectorA, vectorB)) /
+        (lengthA * lengthB);
+
+      const limit = Math.sin((toleranceDegrees * Math.PI) / 180);
+      return normalizedCross <= limit;
+    }
+
+    function orientation(pointA, pointB, pointC) {
+      const value =
+        (pointB.y - pointA.y) * (pointC.x - pointB.x) -
+        (pointB.x - pointA.x) * (pointC.y - pointB.y);
+
+      if (Math.abs(value) < 0.0001) {
+        return 0;
+      }
+
+      return value > 0 ? 1 : 2;
+    }
+
+    function onSegment(pointA, pointB, pointC) {
+      return (
+        pointB.x <= Math.max(pointA.x, pointC.x) + 0.0001 &&
+        pointB.x >= Math.min(pointA.x, pointC.x) - 0.0001 &&
+        pointB.y <= Math.max(pointA.y, pointC.y) + 0.0001 &&
+        pointB.y >= Math.min(pointA.y, pointC.y) - 0.0001
+      );
+    }
+
+    function doSegmentsIntersect(p1, q1, p2, q2) {
+      const o1 = orientation(p1, q1, p2);
+      const o2 = orientation(p1, q1, q2);
+      const o3 = orientation(p2, q2, p1);
+      const o4 = orientation(p2, q2, q1);
+
+      if (o1 !== o2 && o3 !== o4) {
+        return true;
+      }
+
+      if (o1 === 0 && onSegment(p1, p2, q1)) return true;
+      if (o2 === 0 && onSegment(p1, q2, q1)) return true;
+      if (o3 === 0 && onSegment(p2, p1, q2)) return true;
+      if (o4 === 0 && onSegment(p2, q1, q2)) return true;
+
+      return false;
+    }
+
+    function isSelfIntersectingPolygon(points) {
+      if (points.length < 4) {
+        return false;
+      }
+
+      const edgeCount = points.length;
+
+      for (let i = 0; i < edgeCount; i += 1) {
+        const a1 = points[i];
+        const a2 = points[(i + 1) % edgeCount];
+
+        for (let j = i + 1; j < edgeCount; j += 1) {
+          const b1 = points[j];
+          const b2 = points[(j + 1) % edgeCount];
+
+          const sharesVertex =
+            i === j ||
+            (i + 1) % edgeCount === j ||
+            i === (j + 1) % edgeCount;
+
+          if (sharesVertex) {
+            continue;
+          }
+
+          if (doSegmentsIntersect(a1, a2, b1, b2)) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
+    function polygonArea(points) {
+      let sum = 0;
+
+      for (let i = 0; i < points.length; i += 1) {
+        const current = points[i];
+        const next = points[(i + 1) % points.length];
+        sum += current.x * next.y - next.x * current.y;
+      }
+
+      return Math.abs(sum / 2);
+    }
+
+    function createSvgElement(tagName, attributes = {}) {
+      const element = document.createElementNS(SVG_NS, tagName);
+
+      Object.entries(attributes).forEach(([name, value]) => {
+        element.setAttribute(name, String(value));
+      });
+
+      return element;
+    }
+
+    function midpoint(pointA, pointB) {
+      return {
+        x: (pointA.x + pointB.x) / 2,
+        y: (pointA.y + pointB.y) / 2
+      };
+    }
+
+    function normalizeVector(vector) {
+      const length = Math.hypot(vector.x, vector.y) || 1;
+      return {
+        x: vector.x / length,
+        y: vector.y / length
+      };
+    }
+
+    function getPolygonCenter(points) {
+      const total = points.reduce(
+        (accumulator, point) => ({
+          x: accumulator.x + point.x,
+          y: accumulator.y + point.y
+        }),
+        { x: 0, y: 0 }
+      );
+
+      return {
+        x: total.x / points.length,
+        y: total.y / points.length
+      };
+    }
+
+    const stageData = {
+      1: {
+        title: "이등변삼각형 복원",
+        goal:
+          "두 변의 길이가 같을 때 두 밑각도 같아지는 이등변삼각형의 성질을 확인합니다.",
+        labels: ["A", "B", "C"],
+        initialPoints: [
+          { x: 170, y: 390 },
+          { x: 332, y: 120 },
+          { x: 560, y: 370 }
+        ],
+        examplePoints: [
+          { x: 190, y: 385 },
+          { x: 350, y: 115 },
+          { x: 510, y: 385 }
+        ],
+        conditions: [
+          "두 빗변의 길이가 거의 같다.",
+          "두 밑각의 크기가 거의 같다."
+        ],
+        hints: [
+          "꼭짓점 B에서 A와 C로 이어지는 두 변이 같은 길이가 되도록 조절하세요.",
+          "밑변 AC의 양 끝에 있는 ∠A와 ∠C가 같아야 합니다.",
+          "점선으로 표시된 이등변삼각형을 참고해 꼭짓점을 이동하세요."
+        ]
+      },
+      2: {
+        title: "평행사변형 복원",
+        goal:
+          "평행사변형의 대변은 서로 평행하고 길이가 같으며, 마주 보는 각의 크기도 같습니다.",
+        labels: ["A", "B", "C", "D"],
+        initialPoints: [
+          { x: 150, y: 150 },
+          { x: 500, y: 105 },
+          { x: 560, y: 380 },
+          { x: 215, y: 420 }
+        ],
+        examplePoints: [
+          { x: 165, y: 160 },
+          { x: 475, y: 160 },
+          { x: 550, y: 380 },
+          { x: 240, y: 380 }
+        ],
+        conditions: [
+          "두 쌍의 대변이 각각 평행하다.",
+          "두 쌍의 대변 길이가 각각 같다.",
+          "마주 보는 각의 크기가 같다.",
+          "도형이 자기 교차하지 않는다."
+        ],
+        hints: [
+          "AB와 CD, BC와 DA가 서로 짝이 되는 대변입니다.",
+          "노란 방향 가이드와 비슷하게 대변의 기울기를 맞추세요.",
+          "점선 평행사변형을 참고해 네 꼭짓점을 조절하세요."
+        ]
+      },
+      3: {
+        title: "직사각형 복원",
+        goal:
+          "직사각형은 네 각이 모두 직각이고, 대변이 평행하며 길이가 같고, 두 대각선의 길이도 같습니다.",
+        labels: ["A", "B", "C", "D"],
+        initialPoints: [
+          { x: 155, y: 145 },
+          { x: 525, y: 120 },
+          { x: 560, y: 390 },
+          { x: 185, y: 420 }
+        ],
+        examplePoints: [
+          { x: 170, y: 145 },
+          { x: 530, y: 145 },
+          { x: 530, y: 390 },
+          { x: 170, y: 390 }
+        ],
+        conditions: [
+          "네 각이 모두 약 90도이다.",
+          "두 쌍의 대변이 각각 평행하다.",
+          "두 쌍의 대변 길이가 각각 같다.",
+          "두 대각선의 길이가 같다.",
+          "도형이 자기 교차하지 않는다."
+        ],
+        hints: [
+          "네 꼭짓점이 모두 직각이 되도록 조절하세요.",
+          "AB와 CD, BC와 DA가 각각 평행하도록 맞추세요.",
+          "점선 직사각형을 참고해 꼭짓점을 이동하세요."
+        ]
+      }
+    };
+
+    const GeometryEngine = {
+      svg: document.getElementById("geometrySvg"),
+      points: [],
+      labels: [],
+      currentStage: 1,
+      activePointIndex: null,
+      pointerId: null,
+      hintLevel: 0,
+
+      initialize() {
+        this.svg.addEventListener("pointermove", (event) => {
+          this.handlePointerMove(event);
+        });
+
+        this.svg.addEventListener("pointerup", (event) => {
+          this.endDrag(event);
+        });
+
+        this.svg.addEventListener("pointercancel", (event) => {
+          this.endDrag(event);
+        });
+
+        this.svg.addEventListener("pointerleave", (event) => {
+          if (event.buttons === 0) {
+            this.endDrag(event);
+          }
+        });
+      },
+
+      setStage(stageNumber) {
+        this.currentStage = stageNumber;
+        this.points = stageData[stageNumber].initialPoints.map((point) => ({
+          ...point
+        }));
+        this.labels = [...stageData[stageNumber].labels];
+        this.hintLevel = 0;
+        this.activePointIndex = null;
+        this.pointerId = null;
+        this.render();
+      },
+
+      resetPoints() {
+        this.points = stageData[this.currentStage].initialPoints.map((point) => ({
+          ...point
+        }));
+        this.activePointIndex = null;
+        this.pointerId = null;
+        this.render();
+      },
+
+      getSvgPoint(event) {
+        const svgPoint = this.svg.createSVGPoint();
+        svgPoint.x = event.clientX;
+        svgPoint.y = event.clientY;
+
+        const matrix = this.svg.getScreenCTM();
+        if (!matrix) {
+          return { x: 0, y: 0 };
+        }
+
+        const transformed = svgPoint.matrixTransform(matrix.inverse());
+
+        return {
+          x: Math.max(35, Math.min(665, transformed.x)),
+          y: Math.max(35, Math.min(465, transformed.y))
+        };
+      },
+
+      startDrag(event, index) {
+        event.preventDefault();
+        this.activePointIndex = index;
+        this.pointerId = event.pointerId;
+        event.currentTarget.setPointerCapture(event.pointerId);
+      },
+
+      handlePointerMove(event) {
+        if (
+          this.activePointIndex === null ||
+          this.pointerId !== event.pointerId
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+        const point = this.getSvgPoint(event);
+        this.points[this.activePointIndex] = point;
+        this.render();
+        Game.evaluateStage();
+      },
+
+      endDrag(event) {
+        if (
+          this.activePointIndex === null ||
+          (this.pointerId !== null && event.pointerId !== this.pointerId)
+        ) {
+          return;
+        }
+
+        this.activePointIndex = null;
+        this.pointerId = null;
+      },
+
+      setHintLevel(level) {
+        this.hintLevel = level;
+        this.render();
+      },
+
+      getMeasurements() {
+        const points = this.points;
+        const lengths = points.map((point, index) =>
+          calculateDistance(point, points[(index + 1) % points.length])
+        );
+
+        const angles = points.map((point, index) => {
+          const previous = points[(index - 1 + points.length) % points.length];
+          const next = points[(index + 1) % points.length];
+          return calculateAngle(previous, point, next);
+        });
+
+        const diagonals =
+          points.length === 4
+            ? [
+                calculateDistance(points[0], points[2]),
+                calculateDistance(points[1], points[3])
+              ]
+            : [];
+
+        return {
+          lengths,
+          angles,
+          diagonals,
+          selfIntersecting: isSelfIntersectingPolygon(points),
+          area: polygonArea(points)
+        };
+      },
+
+      evaluateConditions() {
+        const measurements = this.getMeasurements();
+        const { lengths, angles, diagonals, selfIntersecting, area } =
+          measurements;
+
+        const validShape =
+          !selfIntersecting &&
+          area > 4500 &&
+          lengths.every((length) => length > 55);
+
+        if (this.currentStage === 1) {
+          const equalSides = nearlyEqual(
+            lengths[0],
+            lengths[1],
+            Math.max(8, Math.max(lengths[0], lengths[1]) * 0.035)
+          );
+
+          const equalBaseAngles = nearlyEqual(angles[0], angles[2], 3.5);
+
+          return {
+            conditions: [equalSides && validShape, equalBaseAngles && validShape],
+            measurements
+          };
+        }
+
+        const vectorAB = createVector(this.points[0], this.points[1]);
+        const vectorBC = createVector(this.points[1], this.points[2]);
+        const vectorCD = createVector(this.points[2], this.points[3]);
+        const vectorDA = createVector(this.points[3], this.points[0]);
+
+        const oppositeParallel =
+          areVectorsParallel(vectorAB, vectorCD, 4) &&
+          areVectorsParallel(vectorBC, vectorDA, 4);
+
+        const oppositeEqual =
+          nearlyEqual(
+            lengths[0],
+            lengths[2],
+            Math.max(9, Math.max(lengths[0], lengths[2]) * 0.04)
+          ) &&
+          nearlyEqual(
+            lengths[1],
+            lengths[3],
+            Math.max(9, Math.max(lengths[1], lengths[3]) * 0.04)
+          );
+
+        if (this.currentStage === 2) {
+          const oppositeAnglesEqual =
+            nearlyEqual(angles[0], angles[2], 4) &&
+            nearlyEqual(angles[1], angles[3], 4);
+
+          return {
+            conditions: [
+              oppositeParallel && validShape,
+              oppositeEqual && validShape,
+              oppositeAnglesEqual && validShape,
+              !selfIntersecting && validShape
+            ],
+            measurements
+          };
+        }
+
+        const allRightAngles = angles.every((angle) =>
+          nearlyEqual(angle, 90, 4)
+        );
+
+        const equalDiagonals = nearlyEqual(
+          diagonals[0],
+          diagonals[1],
+          Math.max(8, Math.max(diagonals[0], diagonals[1]) * 0.03)
+        );
+
+        return {
+          conditions: [
+            allRightAngles && validShape,
+            oppositeParallel && validShape,
+            oppositeEqual && validShape,
+            equalDiagonals && validShape,
+            !selfIntersecting && validShape
+          ],
+          measurements
+        };
+      },
+
+      render() {
+        this.svg.replaceChildren();
+
+        const backgroundGroup = createSvgElement("g");
+        const guideGroup = createSvgElement("g");
+        const shapeGroup = createSvgElement("g");
+        const measureGroup = createSvgElement("g");
+        const pointGroup = createSvgElement("g");
+
+        this.drawHints(guideGroup);
+        this.drawMainShape(shapeGroup);
+        this.drawMeasurements(measureGroup);
+        this.drawPoints(pointGroup);
+
+        this.svg.append(
+          backgroundGroup,
+          guideGroup,
+          shapeGroup,
+          measureGroup,
+          pointGroup
+        );
+      },
+
+      drawMainShape(group) {
+        const polygon = createSvgElement("polygon", {
+          points: this.points.map((point) => `${point.x},${point.y}`).join(" "),
+          class: "shape-main"
+        });
+        group.appendChild(polygon);
+
+        for (let index = 0; index < this.points.length; index += 1) {
+          const nextIndex = (index + 1) % this.points.length;
+          const side = createSvgElement("line", {
+            x1: this.points[index].x,
+            y1: this.points[index].y,
+            x2: this.points[nextIndex].x,
+            y2: this.points[nextIndex].y,
+            class: `shape-side ${this.getHighlightedSideClass(index)}`
+          });
+
+          group.appendChild(side);
+        }
+
+        if (this.currentStage === 3) {
+          group.appendChild(
+            createSvgElement("line", {
+              x1: this.points[0].x,
+              y1: this.points[0].y,
+              x2: this.points[2].x,
+              y2: this.points[2].y,
+              class: "diagonal-line"
+            })
+          );
+
+          group.appendChild(
+            createSvgElement("line", {
+              x1: this.points[1].x,
+              y1: this.points[1].y,
+              x2: this.points[3].x,
+              y2: this.points[3].y,
+              class: "diagonal-line"
+            })
+          );
+        }
+      },
+
+      getHighlightedSideClass(index) {
+        if (this.hintLevel < 1) {
+          return "";
+        }
+
+        if (this.currentStage === 1 && (index === 0 || index === 1)) {
+          return "highlight";
+        }
+
+        if (
+          this.currentStage === 2 &&
+          this.hintLevel === 1 &&
+          [0, 1, 2, 3].includes(index)
+        ) {
+          return "highlight";
+        }
+
+        if (
+          this.currentStage === 3 &&
+          this.hintLevel >= 2 &&
+          [0, 1, 2, 3].includes(index)
+        ) {
+          return "highlight";
+        }
+
+        return "";
+      },
+
+      drawHints(group) {
+        const data = stageData[this.currentStage];
+
+        if (this.hintLevel >= 3) {
+          const example = createSvgElement("polygon", {
+            points: data.examplePoints
+              .map((point) => `${point.x},${point.y}`)
+              .join(" "),
+            class: "example-shape"
+          });
+          group.appendChild(example);
+        }
+
+        if (this.currentStage === 2 && this.hintLevel >= 2) {
+          this.drawParallelGuides(group);
+        }
+
+        if (this.currentStage === 3 && this.hintLevel >= 1) {
+          this.points.forEach((point, index) => {
+            const previous =
+              this.points[(index - 1 + this.points.length) % this.points.length];
+            const next = this.points[(index + 1) % this.points.length];
+
+            const rightAnglePath = this.createRightAnglePath(
+              previous,
+              point,
+              next,
+              22
+            );
+
+            rightAnglePath.setAttribute("class", "right-angle-hint");
+            group.appendChild(rightAnglePath);
+          });
+        }
+      },
+
+      drawParallelGuides(group) {
+        const pairs = [
+          [0, 2],
+          [1, 3]
+        ];
+
+        pairs.forEach((pair) => {
+          pair.forEach((sideIndex) => {
+            const start = this.points[sideIndex];
+            const end = this.points[(sideIndex + 1) % this.points.length];
+            const center = midpoint(start, end);
+            const direction = normalizeVector(createVector(start, end));
+            const halfLength = 48;
+
+            group.appendChild(
+              createSvgElement("line", {
+                x1: center.x - direction.x * halfLength,
+                y1: center.y - direction.y * halfLength,
+                x2: center.x + direction.x * halfLength,
+                y2: center.y + direction.y * halfLength,
+                class: "guide-line"
+              })
+            );
+          });
+        });
+      },
+
+      drawMeasurements(group) {
+        const measurements = this.getMeasurements();
+        const center = getPolygonCenter(this.points);
+
+        this.points.forEach((point, index) => {
+          const next = this.points[(index + 1) % this.points.length];
+          const sideMiddle = midpoint(point, next);
+          const towardOutside = normalizeVector({
+            x: sideMiddle.x - center.x,
+            y: sideMiddle.y - center.y
+          });
+
+          const label = createSvgElement("text", {
+            x: sideMiddle.x + towardOutside.x * 24,
+            y: sideMiddle.y + towardOutside.y * 24 + 5,
+            class: "measure-label"
+          });
+
+          label.textContent = measurements.lengths[index].toFixed(1);
+          group.appendChild(label);
+        });
+
+        this.points.forEach((point, index) => {
+          const previous =
+            this.points[(index - 1 + this.points.length) % this.points.length];
+          const next = this.points[(index + 1) % this.points.length];
+
+          const arc = this.createAngleArc(
+            previous,
+            point,
+            next,
+            this.currentStage === 1 ? 34 : 30
+          );
+
+          if (
+            this.currentStage === 1 &&
+            this.hintLevel >= 2 &&
+            (index === 0 || index === 2)
+          ) {
+            arc.setAttribute("class", "angle-arc highlight");
+          } else {
+            arc.setAttribute("class", "angle-arc");
+          }
+
+          group.appendChild(arc);
+
+          const directionToCenter = normalizeVector({
+            x: center.x - point.x,
+            y: center.y - point.y
+          });
+
+          const angleLabel = createSvgElement("text", {
+            x: point.x + directionToCenter.x * 51,
+            y: point.y + directionToCenter.y * 51 + 4,
+            class: "measure-label"
+          });
+
+          angleLabel.textContent = `${measurements.angles[index].toFixed(1)}°`;
+          group.appendChild(angleLabel);
+
+          if (
+            this.currentStage === 3 &&
+            nearlyEqual(measurements.angles[index], 90, 4)
+          ) {
+            const rightAngle = this.createRightAnglePath(
+              previous,
+              point,
+              next,
+              18
+            );
+            rightAngle.setAttribute("class", "right-angle");
+            group.appendChild(rightAngle);
+          }
+        });
+      },
+
+      createAngleArc(pointA, vertex, pointC, radius) {
+        const vectorA = normalizeVector(createVector(vertex, pointA));
+        const vectorC = normalizeVector(createVector(vertex, pointC));
+
+        const start = {
+          x: vertex.x + vectorA.x * radius,
+          y: vertex.y + vectorA.y * radius
+        };
+
+        const end = {
+          x: vertex.x + vectorC.x * radius,
+          y: vertex.y + vectorC.y * radius
+        };
+
+        const cross = calculateCrossProduct(vectorA, vectorC);
+        const sweepFlag = cross > 0 ? 1 : 0;
+        const angle = calculateAngle(pointA, vertex, pointC);
+        const largeArcFlag = angle > 180 ? 1 : 0;
+
+        return createSvgElement("path", {
+          d: `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`
+        });
+      },
+
+      createRightAnglePath(pointA, vertex, pointC, size) {
+        const vectorA = normalizeVector(createVector(vertex, pointA));
+        const vectorC = normalizeVector(createVector(vertex, pointC));
+
+        const first = {
+          x: vertex.x + vectorA.x * size,
+          y: vertex.y + vectorA.y * size
+        };
+
+        const corner = {
+          x: first.x + vectorC.x * size,
+          y: first.y + vectorC.y * size
+        };
+
+        const second = {
+          x: vertex.x + vectorC.x * size,
+          y: vertex.y + vectorC.y * size
+        };
+
+        return createSvgElement("path", {
+          d: `M ${first.x} ${first.y} L ${corner.x} ${corner.y} L ${second.x} ${second.y}`
+        });
+      },
+
+      drawPoints(group) {
+        const center = getPolygonCenter(this.points);
+
+        this.points.forEach((point, index) => {
+          const halo = createSvgElement("circle", {
+            cx: point.x,
+            cy: point.y,
+            r: 27,
+            class: "point-halo",
+            tabindex: 0,
+            role: "button",
+            "aria-label": `${this.labels[index]} 꼭짓점`
+          });
+
+          halo.addEventListener("pointerdown", (event) => {
+            this.startDrag(event, index);
+          });
+
+          halo.addEventListener("keydown", (event) => {
+            const step = event.shiftKey ? 10 : 4;
+            let changed = true;
+
+            switch (event.key) {
+              case "ArrowLeft":
+                this.points[index].x -= step;
+                break;
+              case "ArrowRight":
+                this.points[index].x += step;
+                break;
+              case "ArrowUp":
+                this.points[index].y -= step;
+                break;
+              case "ArrowDown":
+                this.points[index].y += step;
+                break;
+              default:
+                changed = false;
+            }
+
+            if (changed) {
+              event.preventDefault();
+              this.points[index].x = Math.max(
+                35,
+                Math.min(665, this.points[index].x)
+              );
+              this.points[index].y = Math.max(
+                35,
+                Math.min(465, this.points[index].y)
+              );
+              this.render();
+              Game.evaluateStage();
+            }
+          });
+
+          const visiblePoint = createSvgElement("circle", {
+            cx: point.x,
+            cy: point.y,
+            r: 9,
+            class: "vertex-point"
+          });
+
+          const outward = normalizeVector({
+            x: point.x - center.x,
+            y: point.y - center.y
+          });
+
+          const label = createSvgElement("text", {
+            x: point.x + outward.x * 23,
+            y: point.y + outward.y * 23 + 5,
+            class: "vertex-label"
+          });
+
+          label.textContent = this.labels[index];
+
+          group.append(halo, visiblePoint, label);
+        });
+      }
+    };
+
+    const UI = {
+      totalScore: document.getElementById("totalScore"),
+      bestScore: document.getElementById("bestScore"),
+      stageScore: document.getElementById("stageScore"),
+      stageLabel: document.getElementById("stageLabel"),
+      missionTitle: document.getElementById("missionTitle"),
+      learningGoal: document.getElementById("learningGoal"),
+      conditionList: document.getElementById("conditionList"),
+      feedbackMessage: document.getElementById("feedbackMessage"),
+      measurementSummary: document.getElementById("measurementSummary"),
+      hintText: document.getElementById("hintText"),
+      hintBtn: document.getElementById("hintBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      completionPanel: document.getElementById("completionPanel"),
+      completionText: document.getElementById("completionText"),
+      closeCompletionBtn: document.getElementById("closeCompletionBtn"),
+      stageButtons: Array.from(document.querySelectorAll(".stage-btn")),
+
+      updateStageInfo(stageNumber) {
+        const data = stageData[stageNumber];
+        this.stageLabel.textContent = `STAGE ${stageNumber}`;
+        this.missionTitle.textContent = data.title;
+        this.learningGoal.textContent = data.goal;
+
+        this.conditionList.replaceChildren();
+
+        data.conditions.forEach((conditionText, index) => {
+          const item = document.createElement("div");
+          item.className = "condition-item";
+          item.dataset.conditionIndex = String(index);
+
+          const icon = document.createElement("span");
+          icon.className = "condition-icon";
+          icon.textContent = "·";
+
+          const text = document.createElement("span");
+          text.textContent = conditionText;
+
+          item.append(icon, text);
+          this.conditionList.appendChild(item);
+        });
+      },
+
+      updateConditionStates(conditionStates) {
+        const items = Array.from(
+          this.conditionList.querySelectorAll(".condition-item")
+        );
+
+        items.forEach((item, index) => {
+          const passed = Boolean(conditionStates[index]);
+          const icon = item.querySelector(".condition-icon");
+
+          item.classList.toggle("pass", passed);
+          icon.textContent = passed ? "✓" : "·";
+        });
+      },
+
+      updateMeasurements(stageNumber, measurements) {
+        const sideNames =
+          stageNumber === 1
+            ? ["AB", "BC", "CA"]
+            : ["AB", "BC", "CD", "DA"];
+
+        const angleNames =
+          stageNumber === 1
+            ? ["∠A", "∠B", "∠C"]
+            : ["∠A", "∠B", "∠C", "∠D"];
+
+        const lengthText = sideNames
+          .map(
+            (name, index) =>
+              `${name} ${measurements.lengths[index].toFixed(1)}`
+          )
+          .join(" · ");
+
+        const angleText = angleNames
+          .map(
+            (name, index) =>
+              `${name} ${measurements.angles[index].toFixed(1)}°`
+          )
+          .join(" · ");
+
+        let summary = `${lengthText}<br>${angleText}`;
+
+        if (stageNumber === 3) {
+          summary += `<br>대각선 AC ${measurements.diagonals[0].toFixed(
+            1
+          )} · BD ${measurements.diagonals[1].toFixed(1)}`;
+        }
+
+        if (measurements.selfIntersecting) {
+          summary += `<br><span style="color: var(--danger)">주의: 도형이 자기 교차하고 있습니다.</span>`;
+        }
+
+        this.measurementSummary.innerHTML = summary;
+      },
+
+      updateStageButtons(activeStage, completedStages) {
+        this.stageButtons.forEach((button) => {
+          const stage = Number(button.dataset.stage);
+          button.classList.toggle("active", stage === activeStage);
+          button.classList.toggle("completed", completedStages.has(stage));
+        });
+      },
+
+      showCompletion(stageNumber, awardedScore, alreadyCompleted) {
+        this.completionText.textContent = alreadyCompleted
+          ? `Stage ${stageNumber}의 조건을 다시 모두 만족했습니다. 이 Stage의 점수는 이미 지급되었습니다.`
+          : `Stage ${stageNumber} 복원에 성공하여 ${awardedScore}점을 획득했습니다.`;
+
+        this.completionPanel.hidden = false;
+      },
+
+      hideCompletion() {
+        this.completionPanel.hidden = true;
+      }
+    };
+
+    const Game = {
+      currentStage: 1,
+      totalScore: 0,
+      bestScore: 0,
+      stageScores: {
+        1: 100,
+        2: 100,
+        3: 100
+      },
+      hintLevels: {
+        1: 0,
+        2: 0,
+        3: 0
+      },
+      completedStages: new Set(),
+      completionShownForCurrentShape: false,
+
+      initialize() {
+        this.loadStorage();
+        GeometryEngine.initialize();
+        this.bindEvents();
+        this.switchStage(1);
+        this.updateScoreDisplay();
+      },
+
+      loadStorage() {
+        const savedBest = Number(localStorage.getItem(STORAGE_KEYS.bestScore));
+        this.bestScore = Number.isFinite(savedBest) ? savedBest : 0;
+
+        try {
+          const savedStages = JSON.parse(
+            localStorage.getItem(STORAGE_KEYS.completedStages) || "[]"
+          );
+
+          if (Array.isArray(savedStages)) {
+            this.completedStages = new Set(
+              savedStages
+                .map(Number)
+                .filter((stage) => [1, 2, 3].includes(stage))
+            );
+          }
+        } catch (error) {
+          this.completedStages = new Set();
+        }
+      },
+
+      saveStorage() {
+        localStorage.setItem(
+          STORAGE_KEYS.bestScore,
+          String(this.bestScore)
+        );
+
+        localStorage.setItem(
+          STORAGE_KEYS.completedStages,
+          JSON.stringify(Array.from(this.completedStages).sort())
+        );
+      },
+
+      bindEvents() {
+        UI.stageButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            this.switchStage(Number(button.dataset.stage));
+          });
+        });
+
+        UI.hintBtn.addEventListener("click", () => {
+          this.useHint();
+        });
+
+        UI.resetBtn.addEventListener("click", () => {
+          this.resetCurrentStage();
+        });
+
+        UI.nextBtn.addEventListener("click", () => {
+          const nextStage = this.currentStage === 3 ? 1 : this.currentStage + 1;
+          this.switchStage(nextStage);
+        });
+
+        UI.closeCompletionBtn.addEventListener("click", () => {
+          UI.hideCompletion();
+        });
+      },
+
+      switchStage(stageNumber) {
+        this.currentStage = stageNumber;
+        this.completionShownForCurrentShape = false;
+        UI.hideCompletion();
+
+        GeometryEngine.setStage(stageNumber);
+        GeometryEngine.setHintLevel(this.hintLevels[stageNumber]);
+
+        UI.updateStageInfo(stageNumber);
+        UI.updateStageButtons(stageNumber, this.completedStages);
+        UI.stageScore.textContent = String(this.stageScores[stageNumber]);
+        UI.hintText.textContent =
+          this.hintLevels[stageNumber] === 0
+            ? "아직 힌트를 사용하지 않았습니다."
+            : stageData[stageNumber].hints[
+                this.hintLevels[stageNumber] - 1
+              ];
+
+        UI.hintBtn.disabled = this.hintLevels[stageNumber] >= 3;
+        UI.hintBtn.textContent =
+          this.hintLevels[stageNumber] >= 3
+            ? "힌트 모두 사용"
+            : `힌트 보기 (${this.hintLevels[stageNumber]}/3)`;
+
+        UI.nextBtn.textContent =
+          stageNumber === 3 ? "Stage 1로 이동" : "다음 Stage";
+
+        this.evaluateStage();
+      },
+
+      resetCurrentStage() {
+        GeometryEngine.resetPoints();
+        this.completionShownForCurrentShape = false;
+        UI.hideCompletion();
+        UI.feedbackMessage.textContent =
+          "도형을 초기 상태로 되돌렸습니다. 다시 복원해 보세요.";
+        this.evaluateStage();
+      },
+
+      useHint() {
+        const currentLevel = this.hintLevels[this.currentStage];
+
+        if (currentLevel >= 3) {
+          return;
+        }
+
+        const nextLevel = currentLevel + 1;
+        this.hintLevels[this.currentStage] = nextLevel;
+        this.stageScores[this.currentStage] = Math.max(
+          40,
+          this.stageScores[this.currentStage] - 20
+        );
+
+        GeometryEngine.setHintLevel(nextLevel);
+
+        UI.stageScore.textContent = String(
+          this.stageScores[this.currentStage]
+        );
+
+        UI.hintText.textContent =
+          stageData[this.currentStage].hints[nextLevel - 1];
+
+        UI.hintBtn.textContent =
+          nextLevel >= 3 ? "힌트 모두 사용" : `힌트 보기 (${nextLevel}/3)`;
+
+        UI.hintBtn.disabled = nextLevel >= 3;
+        UI.feedbackMessage.textContent =
+          `힌트 ${nextLevel}단계를 사용해 20점이 감점되었습니다.`;
+
+        this.evaluateStage();
+      },
+
+      evaluateStage() {
+        const result = GeometryEngine.evaluateConditions();
+        const allPassed = result.conditions.every(Boolean);
+
+        UI.updateConditionStates(result.conditions);
+        UI.updateMeasurements(this.currentStage, result.measurements);
+
+        const passedCount = result.conditions.filter(Boolean).length;
+        const totalConditions = result.conditions.length;
+
+        if (allPassed) {
+          UI.feedbackMessage.innerHTML =
+            `<span style="color: var(--success); font-weight: 900;">모든 조건을 만족했습니다. 도형 복원 성공!</span>`;
+
+          if (!this.completionShownForCurrentShape) {
+            this.completionShownForCurrentShape = true;
+            this.completeCurrentStage();
+          }
+        } else {
+          this.completionShownForCurrentShape = false;
+
+          if (result.measurements.selfIntersecting) {
+            UI.feedbackMessage.innerHTML =
+              `<span style="color: var(--danger); font-weight: 800;">변이 서로 교차하지 않도록 꼭짓점 순서를 바로잡으세요.</span>`;
+          } else if (result.measurements.area <= 4500) {
+            UI.feedbackMessage.textContent =
+              "도형이 너무 작거나 납작합니다. 꼭짓점 사이를 더 넓혀 보세요.";
+          } else {
+            UI.feedbackMessage.textContent =
+              `${totalConditions}개 조건 중 ${passedCount}개를 만족했습니다. 조건 표시를 보며 조금 더 조절하세요.`;
+          }
+        }
+      },
+
+      completeCurrentStage() {
+        const alreadyCompleted = this.completedStages.has(this.currentStage);
+        let awardedScore = 0;
+
+        if (!alreadyCompleted) {
+          awardedScore = this.stageScores[this.currentStage];
+          this.totalScore += awardedScore;
+          this.completedStages.add(this.currentStage);
+
+          if (this.totalScore > this.bestScore) {
+            this.bestScore = this.totalScore;
+          }
+
+          this.saveStorage();
+          this.updateScoreDisplay();
+          UI.updateStageButtons(this.currentStage, this.completedStages);
+        }
+
+        UI.showCompletion(
+          this.currentStage,
+          awardedScore,
+          alreadyCompleted
+        );
+      },
+
+      updateScoreDisplay() {
+        UI.totalScore.textContent = String(this.totalScore);
+        UI.bestScore.textContent = String(this.bestScore);
+      }
+    };
+
+    Game.initialize();
+  </script>
+</body>
+</html>
